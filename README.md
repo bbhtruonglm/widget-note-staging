@@ -1,4 +1,4 @@
-# vue2-template
+# chatbox-widget-note-version2
 
 ## Project setup
 ```
