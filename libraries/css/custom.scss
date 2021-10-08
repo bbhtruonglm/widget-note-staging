@@ -1,0 +1,67 @@
+.label-primary {
+    font-size: 10px;
+    justify-content: center;
+    padding: 2px 8px;
+    border-radius: 32px;
+    border: 1px solid #DFE1E4;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.label-gray {
+    color: #140F2D;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.label-black {
+    color: #FFFFFF;
+    background: #4F596A;
+    border: 1px solid #4F596A;
+}
+
+.label-orange {
+    background: #F55600;
+    color: #FFFFFF;
+    border-color: #F55600;
+}
+
+.btn {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.text-orange {
+    color: #F55600;
+}
+
+.text-green {
+    color: #27AE60;
+}
+
+.text-black {
+    color: #4F596A;
+}
+
+.text-red {
+    color: #FF3000;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.line-through {
+    text-decoration: line-through;
+}
+
+.mx-input {
+    height: 30px;
+}
+
+
