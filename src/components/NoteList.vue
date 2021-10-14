@@ -252,22 +252,28 @@ export default {
                     value: ''
                 },
                 {
-                    name: this.$t('note')
+                    name: this.$t('note'),
+                    value: 'note'
                 },
                 {
-                    name: this.$t('appointment_reminder')
+                    name: this.$t('appointment_reminder'),
+                    value: 'appointment_reminder'
                 },
                 {
-                    name: this.$t('support')
+                    name: this.$t('support'),
+                    value: 'support'
                 },
                 {
-                    name: this.$t('meeting')
+                    name: this.$t('meeting'),
+                    value: 'meeting'
                 },
                 {
-                    name: this.$t('leave_the_office')
+                    name: this.$t('leave_the_office'),
+                    value: 'leave_the_office'
                 },
                 {
-                    name: this.$t('email')
+                    name: this.$t('email'),
+                    value: 'email'
                 },
             ],
             schedule_selected: '',
@@ -344,8 +350,19 @@ export default {
                 '/v1/note/read',
                 body,
                 (e, r) => {
+                    
                     if(e) return console.log(e)
-                    this.note_list = r.data.data
+
+                    this.note_list = r.data.data.map(item => {
+
+                        this.schedule_labels.map(item1 => {
+                            if(item.label === item1.value) {
+                                item.label = item1.name
+                            }
+                        })
+
+                        return item
+                    })
                 }
             )
         },
@@ -381,26 +398,26 @@ export default {
                     this.is_show_edit = false
                     this.getNoteList()
 
-                    this.$toasted.success("Cập nhật ghi chú thành công",{
+                    this.$toasted.success(this.$t('update_sucess'),{
                         duration:5000
                     });
                 }
             )
         },
         showRemoveNote() {
-            this.$toasted.show("Bạn chắc chắn muốn xóa ghi chú này?", {
+            this.$toasted.show(this.$t('question_remove'), {
                 type: "info",
                 theme: "outline",
                 duration: 10000,
                 action: [
                     {
-                        text: 'Huỷ',
+                        text: this.$t('cancel'),
                         onClick: (e, toastObject) => {
                             toastObject.goAway(0);
                         }
                     },
                     {
-                        text: 'Xác nhận',
+                        text: this.$t('confirm'),
                         onClick: (e, toastObject) => {
                             toastObject.goAway(0);
                             this.removeNote()

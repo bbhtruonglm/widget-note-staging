@@ -37,5 +37,10 @@ export default {
     'day_more': 'ngày nữa',
     'hour_more': 'tiếng nữa',
     'minute_more': 'phút nữa',
-    'second_more': 'giây nữa'
+    'second_more': 'giây nữa',
+    'create_new_success': "Tạo ghi chú thành công",
+    'update_sucess': 'Cập nhật ghi chú thành công',
+    'question_remove': 'Bạn chắc chắn muốn xóa ghi chú này?',
+    'cancel': 'Huỷ',
+    'confirm': 'Xác nhận'
 }

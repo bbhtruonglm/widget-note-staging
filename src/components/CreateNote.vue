@@ -6,8 +6,8 @@
             <div v-for="(item, index) in lables" 
                 :key="index" 
                 class="label-primary label-gray"
-                :class="{'label-black': item.name === label_selected}"
-                @click="label_selected = item.name"
+                :class="{'label-black': item.value === label_selected}"
+                @click="label_selected = item.value"
             >
                 <span class="text-vertical-center">{{item.name}}</span>
             </div>
@@ -158,25 +158,31 @@ export default {
         return {
             lables : [
                 {
-                    name: this.$t('note')
+                    name: this.$t('note'),
+                    value: 'note'
                 },
                 {
-                    name: this.$t('appointment_reminder')
+                    name: this.$t('appointment_reminder'),
+                    value: 'appointment_reminder'
                 },
                 {
-                    name: this.$t('support')
+                    name: this.$t('support'),
+                    value: 'support'
                 },
                 {
-                    name: this.$t('meeting')
+                    name: this.$t('meeting'),
+                    value: 'meeting'
                 },
                 {
-                    name: this.$t('leave_the_office')
+                    name: this.$t('leave_the_office'),
+                    value: 'leave_the_office'
                 },
                 {
-                    name: this.$t('email')
+                    name: this.$t('email'),
+                    value: 'email'
                 },
             ],
-            label_selected: this.$t('note'),
+            label_selected: 'note',
             input_content: '',
             time_tabs: [
                 {
@@ -305,7 +311,7 @@ export default {
                     this.date_picker = null
                     this.time_selected = null
 
-                    this.$toasted.success("Tạo ghi chú thành công",{
+                    this.$toasted.success(this.$t('create_new_success'),{
                         duration:5000
                     });
                 }
