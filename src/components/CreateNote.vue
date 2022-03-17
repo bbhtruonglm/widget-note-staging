@@ -80,11 +80,6 @@
                     :shortcuts="shortcuts"
                     :format="date_picker_format"
                     :open.sync="open_calendar"
-                    :time-picker-options="{
-                        start: '00:00',
-                        step: '00:30',
-                        end: '23:30',
-                    }"
                     :show-week-number="show_week_number"
                 >
                 </date-picker>
@@ -151,9 +146,28 @@ import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import Resful from '@/services/resful.js'
 
+let url_string = window.location.href
+let url = new URL(url_string);
+let access_token = url.searchParams.get("access_token");
+let secret_key = '0cf5516973a145929ff36d3303183e5f'
+
 export default {
     name: "CreateNote",
     components: { DatePicker },
+    created() {
+        Resful.chatbox_post(
+            'https://chatbox-app.botbanhang.vn/v1/service/partner-authenticate',
+            {
+                access_token,
+                secret_key
+            },
+            (e, r) => {
+                if(e) return console.log(e)
+                this.staff_data = r.data.data.conversation_staff.snap_staff
+                console.log("aaaaa", this.staff_data)
+            }
+        )
+    },
     data() {
         return {
             lables : [
@@ -230,10 +244,8 @@ export default {
             ],
             frequency_selected: 'NONE',
             open_modal: false,
+            staff_data: {}
         }
-    },
-    mounted() {
-       
     },
     watch: {
         frequency_selected: function(val) {
@@ -301,7 +313,9 @@ export default {
                     "label": this.label_selected,
                     "content": this.input_content,
                     "schedule_time": this.date_picker,
-                    "frequency" : this.frequency_selected
+                    "frequency" : this.frequency_selected,
+                    "fb_staff_id": this.staff_data.fb_staff_id,
+                    "staff_name": this.staff_data.name
                 },
                 (e, r) => {
                     if(e) return console.log(e)

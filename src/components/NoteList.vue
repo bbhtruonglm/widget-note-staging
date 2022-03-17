@@ -20,67 +20,77 @@
                 :key="index"
                 @click="showEdit(item)"
             >
+                <div class="staff-avatar">
 
-                <div class="time">
-                    <span :class="{'time-number': !item.finished && item.schedule_time }">
-
-                        {{item.createdAt | convert_time}} 
-
-                        <!-- <span 
-                            v-for="(item1, index1) in frequency" :key="index1"
-                        >
-                            <span v-if="item1.value === item.frequency && !item.finished">
-                               [ {{item1.name}} ] 
-                            </span>
-                        </span>                         -->
-
-                        <span 
-                            class="text-red text-bold"
-                            v-show="item.finished && !item.watched"
-                        >
-                            ({{ $t('not_seen') }})
-                        </span>
-
-                        <span v-show="item.finished && item.watched">
-                            ({{ $t('seen') }})
-                        </span>
-
-                    </span>
-
-                    <span class="text-green text-bold"
-                        v-show="item.finished && item.schedule_time"
+                    <div 
+                        class="staff-info" 
+                        v-if="item.fb_staff_id"
                     >
-                        {{ $t('finished') }}
-                    </span>
+                        <img :src="item.avatar">
+                    </div>
 
-                    <span class="text-orange text-bold"
-                        v-show="!item.finished && item.schedule_time && !item.is_remove"
-                    >
-                        <!-- {{item.schedule_time | time_more}} -->
-                        {{ showTimeMore(item.schedule_time) }}
-                    </span>
-
-                    <span class="text-black text-bold"
-                        v-show="item.is_remove"
-                    >
-                        {{ $t('clear_calendar') }}
-                    </span>
-                    
                 </div>
+                
+                <div class="note-content">
 
-                <div class="content">
-                    <div class="label-primary label-gray">
-                        <span>
-                            {{item.label}}
+                    <div class="time">
+                        <span :class="{'time-number': !item.finished && item.schedule_time }">
+
+                            <span v-if="item.staff_name"> 
+                                {{ item.staff_name }} - 
+                            </span>  
+                            
+                            {{item.createdAt | convert_time}} 
+
+                            <span 
+                                class="text-red text-bold"
+                                v-show="item.finished && !item.watched"
+                            >
+                                ({{ $t('not_seen') }})
+                            </span>
+
+                            <span v-show="item.finished && item.watched">
+                                ({{ $t('seen') }})
+                            </span>
+
                         </span>
-                    </div>
-                    <div class="schedule-content">
-                        <p
-                            :class="{ 'line-through': item.finished, 'text-red': !item.watched && item.finished }"
+
+                        <span class="text-green text-bold"
+                            v-show="item.finished && item.schedule_time"
                         >
-                            {{item.content}}
-                        </p>
+                            {{ $t('finished') }}
+                        </span>
+
+                        <span class="text-orange text-bold"
+                            v-show="!item.finished && item.schedule_time && !item.is_remove"
+                        >
+                            <!-- {{item.schedule_time | time_more}} -->
+                            {{ showTimeMore(item.schedule_time) }}
+                        </span>
+
+                        <span class="text-black text-bold"
+                            v-show="item.is_remove"
+                        >
+                            {{ $t('clear_calendar') }}
+                        </span>
+                        
                     </div>
+
+                    <div class="content">
+                        <div class="label-primary label-gray">
+                            <span>
+                                {{item.label}}
+                            </span>
+                        </div>
+                        <div class="schedule-content">
+                            <p
+                                :class="{ 'line-through': item.finished, 'text-red': !item.watched && item.finished }"
+                            >
+                                {{item.content}}
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -362,6 +372,10 @@ export default {
                             }
                         })
 
+                        if(item.fb_staff_id) {
+                            item.avatar = `https://graph.facebook.com/${item.fb_staff_id}/picture`
+                        }
+
                         return item
                     })
                 }
@@ -510,6 +524,14 @@ export default {
     .label-primary {
         white-space: nowrap;
         margin-right: 10px;
+    }
+}
+
+.staff-info {
+    display: flex;
+    img {
+        border-radius: 100%;
+        width: 30px; 
     }
 }
 

@@ -44,7 +44,8 @@
 
         .input-flex {
             flex: 1;
-            overflow-y: scroll;
+            // overflow-y: scroll;
+            overflow: hidden;
             padding: 5px;
 
             .chat-input-text:empty::before {
@@ -240,11 +241,21 @@
         .schedule-list {
         margin-bottom: 10px;
         width: 94%;
-        padding: 5px 10px;
+        padding: 5px;
         background: #EFF2F5;
         border: 1px solid #F2F2F2;
         border-radius: 5px 10px;
+        display: flex;
+        align-items: center;
 
+        .staff-avatar {
+            margin-right: 10px;
+        }
+
+        .note-content {
+            width: 100%;
+            padding-right: 3px;
+        }
 
         .time{
             display: flex;
@@ -282,7 +293,7 @@
 
                 p {
                     margin: 0;
-                    width: 250px;
+                    width: 240px;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
