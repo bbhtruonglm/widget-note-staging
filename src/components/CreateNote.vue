@@ -163,7 +163,7 @@ export default {
             },
             (e, r) => {
                 if(e) return console.log(e)
-                this.staff_data = r.data.data.conversation_staff.snap_staff
+                this.staff_data = r.data.data.public_profile
                 console.log("aaaaa", this.staff_data)
             }
         )
@@ -314,8 +314,8 @@ export default {
                     "content": this.input_content,
                     "schedule_time": this.date_picker,
                     "frequency" : this.frequency_selected,
-                    "fb_staff_id": this.staff_data.fb_staff_id,
-                    "staff_name": this.staff_data.name
+                    "fb_staff_id": this.staff_data.current_staff_id,
+                    "staff_name": this.staff_data.current_staff_name
                 },
                 (e, r) => {
                     if(e) return console.log(e)
@@ -326,7 +326,7 @@ export default {
                     this.time_selected = null
 
                     this.$toasted.success(this.$t('create_new_success'),{
-                        duration:5000
+                        duration: 1000
                     });
                 }
             )

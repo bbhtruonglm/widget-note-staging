@@ -42,7 +42,7 @@ export default {
                     name: this.$t('appointment_scheduled')
                 }
             ],
-            tab_selected: this.$t('create_new')
+            tab_selected: this.$t('appointment_scheduled')
         }
     }
 };
