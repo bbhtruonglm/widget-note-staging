@@ -219,8 +219,7 @@ export default {
             ],
             frequency_selected: 'NONE',
             open_modal: false,
-            staff_data: {},
-            access_token: ''
+            staff_data: {}
         }
     },
     mounted() {
@@ -288,7 +287,7 @@ export default {
 
             Resful.post(
                 {
-                    access_token: this.access_token,
+                    access_token: window.access_token || '',
                     body: {
                         "label": this.label_selected,
                         "content": this.input_content,
@@ -336,13 +335,13 @@ export default {
                             case 'RELOAD':
 
                                 // * Ghi đè lại access_token
-                                _this.access_token = event.data.payload[
+                                window.access_token = event.data.payload[
                                     'access_token'
                                 ] || ''
 
                                 console.log(
-                                    "this.access_token", 
-                                    _this.access_token
+                                    "window.access_token", 
+                                    window.access_token
                                 )
 
                                 break;

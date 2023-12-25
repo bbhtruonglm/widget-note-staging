@@ -314,7 +314,7 @@ export default {
 
             Resful.post(
                 {
-                    access_token: this.access_token,
+                    access_token: window.access_token || '',
                     body,
                     path: '/v1/note/read'
                 },
@@ -354,7 +354,7 @@ export default {
 
             Resful.post(
                 {
-                    access_token: this.access_token,
+                    access_token: window.access_token || '',
                     body: {
                         "_id": this.item_edit._id,
                         "label": this.label_selected,
@@ -406,7 +406,7 @@ export default {
 
             Resful.post(
                 {
-                    access_token: this.access_token,
+                    access_token: window.access_token || '',
                     body: {
                         "_id": this.item_edit._id,
                         "is_remove": true
@@ -428,7 +428,7 @@ export default {
         watchNote() {
             Resful.post(
                 {
-                    access_token: this.access_token,
+                    access_token: window.access_token || '',
                     body: {
                         "_id": this.item_edit._id,
                         "watched": true
@@ -497,13 +497,13 @@ export default {
                             case 'RELOAD':
 
                                 // * Ghi đè lại access_token
-                                _this.access_token = event.data.payload[
+                                window.access_token = event.data.payload[
                                     'access_token'
                                 ] || ''
 
                                 console.log(
-                                    "this.access_token", 
-                                    _this.access_token
+                                    "window.access_token", 
+                                    window.access_token
                                 )
 
                                 // * Lấy danh sách note mới
