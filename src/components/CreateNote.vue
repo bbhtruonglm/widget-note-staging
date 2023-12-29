@@ -129,6 +129,21 @@ let secret_key = '0cf5516973a145929ff36d3303183e5f'
 export default {
     name: "CreateNote",
     components: { DatePicker },
+    created() {
+        Resful.chatbox_post(
+            'https://chatbox-app.botbanhang.vn/v1/service/partner-authenticate',
+            {
+                access_token,
+                secret_key
+            },
+            (e, r) => {
+                if (e) return console.log(e)
+                this.staff_data = r.data.data.public_profile
+                this.placeholder = `${$t('input_content')} ${this.staff_data.client_name}`
+                console.log("widget note user info", this.staff_data)
+            }
+        )
+    },
     data() {
         return {
             lables: [
@@ -210,7 +225,6 @@ export default {
         }
     },
     mounted() {
-        this.getUserInfo()
         this.listenParentEvent()
     },
     watch: {
@@ -341,6 +355,11 @@ export default {
                                 window.access_token = event.data.payload[
                                     'access_token'
                                 ] || ''
+
+                                console.log(
+                                    "window.access_token widget note",
+                                    window.access_token
+                                )
 
                                 _this.getUserInfo()
 
