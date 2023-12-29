@@ -322,7 +322,7 @@ export default {
             Resful.chatbox_post(
                 'https://chatbox-app.botbanhang.vn/v1/service/partner-authenticate',
                 {
-                    access_token,
+                    access_token: window.access_token,
                     secret_key
                 },
                 (e, r) => {
