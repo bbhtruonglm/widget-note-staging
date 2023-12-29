@@ -13,8 +13,8 @@
         <div class="input-content">
 
             <div class="input-flex">
-                <div id="content" contenteditable="plaintext-only" :placeholder="`${$t('input_content')} ${this.staff_data.client_name}`"
-                    class="chat-input-text" @input="onInput">
+                <div id="content" contenteditable="plaintext-only" :placeholder="placeholder" class="chat-input-text"
+                    @input="onInput">
                 </div>
             </div>
 
@@ -129,20 +129,6 @@ let secret_key = '0cf5516973a145929ff36d3303183e5f'
 export default {
     name: "CreateNote",
     components: { DatePicker },
-    created() {
-        Resful.chatbox_post(
-            'https://chatbox-app.botbanhang.vn/v1/service/partner-authenticate',
-            {
-                access_token,
-                secret_key
-            },
-            (e, r) => {
-                if (e) return console.log(e)
-                this.staff_data = r.data.data.public_profile
-                console.log("aaaaa", this.staff_data)
-            }
-        )
-    },
     data() {
         return {
             lables: [
@@ -219,10 +205,12 @@ export default {
             ],
             frequency_selected: 'NONE',
             open_modal: false,
-            staff_data: {}
+            staff_data: {},
+            placeholder: $t('input_content')
         }
     },
     mounted() {
+        this.getUserInfo()
         this.listenParentEvent()
     },
     watch: {
@@ -316,9 +304,24 @@ export default {
             if (this.open_modal) return this.open_modal = false
             if (!this.open_modal) return this.open_modal = true
         },
+        getUserInfo() {
+            Resful.chatbox_post(
+                'https://chatbox-app.botbanhang.vn/v1/service/partner-authenticate',
+                {
+                    access_token,
+                    secret_key
+                },
+                (e, r) => {
+                    if (e) return console.log(e)
+                    this.staff_data = r.data.data.public_profile
+                    this.placeholder = `${$t('input_content')} ${this.staff_data.client_name}`
+                    console.log("widget note user info", this.staff_data)
+                }
+            )
+        },
         listenParentEvent() {
             try {
-            
+
                 const _this = this
 
                 // * Lắng nghe event message từ parent
@@ -339,10 +342,7 @@ export default {
                                     'access_token'
                                 ] || ''
 
-                                console.log(
-                                    "window.access_token", 
-                                    window.access_token
-                                )
+                                _this.getUserInfo()
 
                                 break;
                             default: console.log("EVENT_TYPE_INVALID")
