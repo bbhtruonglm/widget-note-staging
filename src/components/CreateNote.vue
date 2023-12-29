@@ -13,7 +13,7 @@
         <div class="input-content">
 
             <div class="input-flex">
-                <div id="content" contenteditable="plaintext-only" :placeholder="$t('input_content')"
+                <div id="content" contenteditable="plaintext-only" :placeholder="`${$t('input_content')} ${this.staff_data.client_name}`"
                     class="chat-input-text" @input="onInput">
                 </div>
             </div>
