@@ -2,7 +2,7 @@
     <div>
         <!-- Label -->
         <div class="labels padding-bottom">
-            <div v-for="(item, index) in schedule_labels" :key="index" class="label-primary label-gray"
+            <div v-for="(item, index) in schedule_labels" :key="index" class="label-primary label-gray custom-label"
                 :class="{ 'label-black': item.value === schedule_selected }"
                 @click="schedule_selected = item.value, getNoteList()">
                 <span class="text-vertical-center">{{ item.name }}</span>
@@ -58,7 +58,7 @@
                     </div>
 
                     <div class="content">
-                        <div class="label-primary label-gray">
+                        <div class="label-primary label-gray custom-time">
                             <span>
                                 {{ item.label }}
                             </span>

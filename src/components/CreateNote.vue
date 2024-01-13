@@ -3,7 +3,7 @@
     <div>
         <!-- Label -->
         <div class="labels padding-bottom">
-            <div v-for="(item, index) in lables" :key="index" class="label-primary label-gray"
+            <div v-for="(item, index) in lables" :key="index" class="label-primary label-gray custom-label"
                 :class="{ 'label-black': item.value === label_selected }" @click="label_selected = item.value">
                 <span class="text-vertical-center">{{ item.name }}</span>
             </div>
@@ -36,7 +36,7 @@
 
         <!-- Time label -->
         <div class="time-labels">
-            <div v-for="(item, index) in time_tabs" :key="index" class="label-primary"
+            <div v-for="(item, index) in time_tabs" :key="index" class="label-primary custom-time"
                 :class="{ 'label-orange': item.value === time_selected }" @click="time_selected = item.value">
                 <span class="text-vertical-center">{{ item.name }}</span>
             </div>
