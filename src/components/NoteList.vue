@@ -1,17 +1,21 @@
 <template>
     <div>
         <!-- Label -->
-        <div class="labels padding-bottom">
+        <!-- <div class="labels padding-bottom">
             <div v-for="(item, index) in schedule_labels" :key="index" class="label-primary label-gray custom-label"
                 :class="{ 'label-black': item.value === schedule_selected }"
                 @click="schedule_selected = item.value, getNoteList()">
                 <span class="text-vertical-center">{{ item.name }}</span>
             </div>
-        </div>
+        </div> -->
 
         <div class="body-schedule-list" v-show="!is_show_edit">
 
-            <div class="schedule-list" v-for="(item, index) in note_list" :key="index" @click="showEdit(item)">
+            <div 
+                class="schedule-list" v-for="(item, index) in note_list" 
+                :key="index" @click="showEdit(item)"
+                v-show="note_list.length"
+            >
                 <div class="staff-avatar">
 
                     <div class="staff-info" v-if="item.fb_staff_id">
@@ -73,6 +77,12 @@
                 </div>
 
             </div>
+
+            <div class="empty" v-show="!note_list.length">
+                <img src="./../assets/empty.svg" alt="">
+                <p>Chưa có ghi chú</p>
+            </div>
+
         </div>
 
         <div class="edit-note" v-show="is_show_edit">
@@ -539,6 +549,22 @@ export default {
     img {
         border-radius: 100%;
         width: 30px;
+    }
+}
+.empty {
+    width: 100%;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    img {
+        width: 100px;
+    }
+    
+    p {
+        color: gray;
     }
 }
 </style>

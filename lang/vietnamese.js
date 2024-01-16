@@ -1,6 +1,6 @@
 export default {
     'create_new': 'Tạo mới',
-    'appointment_scheduled': 'Lịch hẹn đã lên',
+    'appointment_scheduled': 'Danh sách',
     'note': 'Ghi chú',
     'appointment_reminder': 'Nhắc hẹn',
     'support': 'Hỗ trợ',

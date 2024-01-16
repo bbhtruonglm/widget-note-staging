@@ -2,12 +2,12 @@
     <!-- Create tabs -->
     <div>
         <!-- Label -->
-        <div class="labels padding-bottom">
+        <!-- <div class="labels padding-bottom">
             <div v-for="(item, index) in lables" :key="index" class="label-primary label-gray custom-label"
                 :class="{ 'label-black': item.value === label_selected }" @click="label_selected = item.value">
                 <span class="text-vertical-center">{{ item.name }}</span>
             </div>
-        </div>
+        </div> -->
 
         <!-- Input -->
         <div class="input-content">
