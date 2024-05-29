@@ -1,47 +1,67 @@
 <template>
-    <div class="container">
+  <div class="h-screen w-screen bg-slate-200">
+    <div
+      class="container h-full w-full md:w-[395px] md:h-[300px] text-sm px-3 py-2 flex flex-col gap-2 bg-white"
+    >
+      <div class="w-full h-14 border rounded-md py-1 px-3">
+        <input
+          class="chat-input-text outline-none w-full text-sm"
+          v-model="input_content"
+          @input="handleChangeInput"
+          :placeholder="'Tạo ghi chú mới...(Nhấn Shift + Enter để tạo nhanh)'"
+        />
+      </div>
 
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="btn" v-for="(item, index) in tabs" :key="index"
-                :class="{ 'label-orange': item.name === tab_selected }" @click="tab_selected = item.name">
-                {{ item.name }}
-            </div>
-        </div>
+      <!-- List tabs -->
+      <NoteList v-if="tab_selected === 'NOTE_LIST'" />
 
-
-        <!-- List tabs -->
-        <NoteList v-if="tab_selected === tabs[0].name" />
-
-        <!-- Create tabs -->
-        <CreateNote v-if="tab_selected === tabs[1].name" />
-
+      <!-- Create tabs -->
+      <CreateNote
+        v-if="tab_selected === 'CREATE_NEW'"
+        v-model:input_content="input_content"
+        @changeTab="changeTab"
+      />
     </div>
+  </div>
 </template>
 
-<script>
-import CreateNote from './CreateNote.vue'
-import NoteList from './NoteList.vue'
+<script lang="ts">
+import debounce from "lodash/debounce";
+import CreateNote from "./CreateNote.vue";
+import NoteList from "./NoteList.vue";
 
 export default {
-    name: "DashBoard",
-    components: {
-        CreateNote,
-        NoteList
+  name: "DashBoard",
+  components: {
+    CreateNote,
+    NoteList,
+  },
+  data() {
+    return {
+      handleChangeInput: () => {},
+      // tabs: [
+      //   {
+      //     name: this.$t("appointment_scheduled"),
+      //   },
+      //   {
+      //     name: this.$t("create_new"),
+      //   },
+      // ],
+      input_content: "" as string,
+      tab_selected: "NOTE_LIST",
+      is_remind: false,
+    };
+  },
+  created() {
+    this.handleChangeInput = debounce(() => {
+      if (this.input_content) return this.changeTab("CREATE_NEW");
+      this.changeTab("NOTE_LIST");
+    }, 500);
+  },
+  methods: {
+    changeTab(tab: string) {
+      this.tab_selected = tab;
     },
-    data() {
-        return {
-            tabs: [
-                {
-                    name: this.$t('appointment_scheduled')
-                },
-                {
-                    name: this.$t('create_new'),
-                }
-            ],
-            tab_selected: this.$t('appointment_scheduled')
-        }
-    }
+  },
 };
 </script>
-
