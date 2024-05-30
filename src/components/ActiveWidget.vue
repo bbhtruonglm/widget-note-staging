@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import {Resful} from "../services/resful";
+import {Resful} from "@/services/resful";
 
 let url_string = window.location.href;
 let url = new URL(url_string);

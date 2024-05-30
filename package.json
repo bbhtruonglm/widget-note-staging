@@ -4,9 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "dev": "vite --mode dev --open",
+    "staging": "vite --mode staging --open",
+    "prod": "vite --mode prod --open",
+    "build-dev": "run-p type-check build-only-dev",
+    "build-staging": "run-p type-check build-only-staging",
+    "build-prod": "run-p type-check build-only-prod",
+    "build": "run-p type-check build-only-prod",
+    "build-only-dev": "vite build --mode dev",
+    "build-only-staging": "vite build --mode staging",
+    "build-only-prod": "vite build --mode prod",
+    "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
     "async": "^3.2.5",

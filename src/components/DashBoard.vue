@@ -58,6 +58,9 @@ export default {
       this.changeTab("NOTE_LIST");
     }, 500);
   },
+  mounted() {
+    console.log(globalThis?.$env?.secret_key);
+  },
   methods: {
     changeTab(tab: string) {
       this.tab_selected = tab;
