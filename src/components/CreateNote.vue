@@ -22,21 +22,30 @@
         <!-- :shortcuts="shortcuts"
           open.sync="open_calendar" -->
         <date-picker
+          prefix-class="xmx"
           placeholder="Không lập lịch"
-          class="w-full"
+          class="w-full h-full"
           v-model:value="date_picker"
           value-type="timestamp"
           :type="type_date_picker"
           :format="date_picker_format"
           :show-week-number="show_week_number"
+          input-class="w-full border-2 pt-1 pb-1.5 px-3 rounded outline-none placeholder:text-gray-500"
+          :confirm="true"
+          confirm-text="Xác nhận"
         >
+          <!-- <template #footer>
+            <button class="bg-orange-600 text-white px-2 rounded-md">
+              Chọn
+            </button>
+          </template> -->
         </date-picker>
       </div>
       <div class="col-span-1 flex flex-col gap-1">
         <label class="text-xs">{{ $t("frequency") }}</label>
         <select
           v-model="frequency_selected"
-          class="border-2 pt-1 pb-1.5 px-3 rounded outline-none"
+          class="border-2 px-3 rounded outline-none h-full"
         >
           <option
             v-for="(item, index) in frequency"
@@ -58,10 +67,9 @@
       >
         {{ $t("close") }}
       </div>
-
       <div
-        class="w-3/4 text-center bg-slate-400 text-white py-2 rounded-md cursor-pointer hover:shadow-md hover:shadow-black/20"
-        :class="{'bg-orange-600': input_content}"
+        class="w-3/4 text-center text-white py-2 rounded-md cursor-pointer hover:shadow-md hover:shadow-black/20"
+        :class="input_content ? 'bg-orange-600' : 'bg-gray-400'"
         @click="create_new_note()"
       >
         {{ $t("save") }}
@@ -72,21 +80,21 @@
 
 <script lang="ts">
 import DatePicker from "vue-datepicker-next";
-import "vue-datepicker-next/index.css";
+import "vue-datepicker-next/locale/vi";
 import {Resful} from "@/services/resful.js";
 
 let url_string = window.location.href;
 let url = new URL(url_string);
 let access_token = url.searchParams.get("access_token");
 // let secret_key = "0cf5516973a145929ff36d3303183e5f";
-let secret_key = "dc575a112fc24c35b6c289d0a83ab8e6";
-
+let secret_key = globalThis?.$env?.secret_key;
 export default {
   name: "CreateNote",
   props: ["input_content"],
   emits: ["update:input_content", "changeTab"],
   components: {DatePicker},
   created() {
+    // TODO remove with sdk
     Resful.chatbox_post(
       "https://chatbox-app.botbanhang.vn/v1/service/partner-authenticate",
       {
@@ -243,7 +251,7 @@ export default {
     // },
     create_new_note() {
       if (!this.input_content) return;
-
+      // [x] remove with sdk
       Resful.post(
         {
           access_token: window.access_token || access_token,
@@ -265,7 +273,7 @@ export default {
           this.$emit("update:input_content", "");
           this.date_picker = null;
           this.time_selected = "";
-
+          this.$emit("changeTab", "NOTE_LIST");
           // this.$toasted.success(this.$t("create_new_success"), {
           //   duration: 1000,
           // });
@@ -315,11 +323,10 @@ export default {
               case "RELOAD":
                 // * Ghi đè lại access_token
                 window.access_token = event.data.payload["access_token"] || "";
-
-                console.log(
-                  "window.access_token widget note",
-                  window.access_token
-                );
+                // console.log(
+                //   "window.access_token widget note",
+                //   window.access_token
+                // );
 
                 _this.getUserInfo();
 
@@ -342,7 +349,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 .labels {
   overflow: auto;
 
@@ -351,4 +358,10 @@ export default {
     margin-right: 10px;
   }
 }
+$namespace: "xmx"; // change the 'mx' to 'xmx'. then <date-picker prefix-class="xmx" />
+
+$default-color: #555;
+$primary-color: #f55600;
+
+@import "vue-datepicker-next/scss/index.scss";
 </style>

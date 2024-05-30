@@ -3,20 +3,20 @@
     <div
       class="container h-full w-full md:w-[395px] md:h-[300px] text-sm px-3 py-2 flex flex-col gap-2 bg-white"
     >
-      <div class="w-full h-14 border rounded-md py-1 px-3">
-        <input
-          class="chat-input-text outline-none w-full text-sm"
-          v-model="input_content"
-          @input="handleChangeInput"
-          :placeholder="'Tạo ghi chú mới...(Nhấn Shift + Enter để tạo nhanh)'"
-        />
-      </div>
+      <input
+        class="w-full h-14 border rounded-md pb-5 px-3 outline-none text-sm"
+        v-model="input_content"
+        @input="handleChangeInput"
+        :placeholder="'Tạo ghi chú mới...(Nhấn Shift + Enter để tạo nhanh)'"
+        @keyup="handleKeyUp"
+      />
 
       <!-- List tabs -->
       <NoteList v-if="tab_selected === 'NOTE_LIST'" />
 
       <!-- Create tabs -->
       <CreateNote
+        ref="create_note"
         v-if="tab_selected === 'CREATE_NEW'"
         v-model:input_content="input_content"
         @changeTab="changeTab"
@@ -58,9 +58,19 @@ export default {
       this.changeTab("NOTE_LIST");
     }, 500);
   },
+  mounted() {
+    console.log(globalThis?.$env?.secret_key);
+  },
   methods: {
     changeTab(tab: string) {
       this.tab_selected = tab;
+    },
+    handleKeyUp(event: any) {
+      if (event.shiftKey && event.keyCode === 13) {
+        // TODO đang tắt check ts chuyển sang composition API sẽ sửa
+        // @ts-ignore
+        this.$refs?.create_note?.create_new_note();
+      }
     },
   },
 };

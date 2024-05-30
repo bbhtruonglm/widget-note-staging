@@ -1,11 +1,16 @@
 <template>
-  <div class="active-body">
-    <div @click="active()" class="btn btn-active label-orange">Kích hoạt</div>
+  <div class="active-body flex items-center justify-center h-screen">
+    <div
+      @click="active()"
+      class="w-fit h-12 bg-orange-600 text-white flex items-center justify-center rounded-md px-5 cursor-pointer"
+    >
+      Kích hoạt
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Resful} from "../services/resful";
+import {Resful} from "@/services/resful";
 
 let url_string = window.location.href;
 let url = new URL(url_string);
@@ -25,9 +30,16 @@ export default {
           access_token: token,
           token_partner: "active",
         },
-        (e: any, r: string) => {
-          if (e) return console.log(e);
-          alert(r);
+        (e: any, r: any) => {
+          if (e) {
+            alert("Kích hoạt không thành công thành công");
+            console.log("oauth error", e);
+          }
+          console.log(r.data);
+
+          if (r.data.code === 200) {
+            alert("Kích hoạt thành công");
+          }
           window.close();
         }
       );
