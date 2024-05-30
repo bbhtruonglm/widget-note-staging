@@ -19,6 +19,7 @@
   "dependencies": {
     "async": "^3.2.5",
     "axios": "^1.7.2",
+    "bbh-chatbox-widget-js-sdk": "^1.0.5",
     "lodash": "^4.17.21",
     "toastify-js": "^1.12.0",
     "vue": "^3.4.21",

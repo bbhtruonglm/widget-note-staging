@@ -25,53 +25,32 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+//* import library
 import debounce from "lodash/debounce";
+import {ref} from "vue";
+//* import components
 import CreateNote from "./CreateNote.vue";
 import NoteList from "./NoteList.vue";
 
-export default {
-  name: "DashBoard",
-  components: {
-    CreateNote,
-    NoteList,
-  },
-  data() {
-    return {
-      handleChangeInput: () => {},
-      // tabs: [
-      //   {
-      //     name: this.$t("appointment_scheduled"),
-      //   },
-      //   {
-      //     name: this.$t("create_new"),
-      //   },
-      // ],
-      input_content: "" as string,
-      tab_selected: "NOTE_LIST",
-      is_remind: false,
-    };
-  },
-  created() {
-    this.handleChangeInput = debounce(() => {
-      if (this.input_content) return this.changeTab("CREATE_NEW");
-      this.changeTab("NOTE_LIST");
-    }, 500);
-  },
-  mounted() {
-    console.log(globalThis?.$env?.secret_key);
-  },
-  methods: {
-    changeTab(tab: string) {
-      this.tab_selected = tab;
-    },
-    handleKeyUp(event: any) {
-      if (event.shiftKey && event.keyCode === 13) {
-        // TODO đang tắt check ts chuyển sang composition API sẽ sửa
-        // @ts-ignore
-        this.$refs?.create_note?.create_new_note();
-      }
-    },
-  },
-};
+/** Nội dung của ghi chú */
+const input_content = ref<string>("");
+
+/** Tab đang được hiển thị */
+const tab_selected = ref<string>("NOTE_LIST");
+
+const handleChangeInput = debounce(() => {
+  if (input_content.value) return changeTab("CREATE_NEW");
+  changeTab("NOTE_LIST");
+}, 500);
+function changeTab(tab: string) {
+  tab_selected.value = tab;
+}
+function handleKeyUp(event: any) {
+  if (event.shiftKey && event.keyCode === 13) {
+    // TODO đang tắt check ts chuyển sang composition API sẽ sửa
+    // @ts-ignore
+    this.$refs?.create_note?.create_new_note();
+  }
+}
 </script>

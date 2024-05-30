@@ -15,8 +15,6 @@ let url = new URL(url_string);
 globalThis.access_token = url.searchParams.get("access_token");
 // let secret_key = "0cf5516973a145929ff36d3303183e5f";
 // let secret_key = "dc575a112fc24c35b6c289d0a83ab8e6";
-// let secret_key = globalThis?.$env?.secret_key;
-// dc575a112fc24c35b6c289d0a83ab8e6
 
 export default {
   name: "App",
