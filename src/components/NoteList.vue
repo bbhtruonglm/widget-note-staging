@@ -20,17 +20,17 @@
                                 {{ item.staff_name }} -
                             </span> -->
 
-            {{ item.createdAt ? convertTimeList(item.createdAt) : "" }}
+            {{ item.createdAt ? convertTimeList(item.createdAt) : '' }}
 
             <span
               class="text-red-500 font-semibold"
               v-show="item.finished && !item.watched"
             >
-              ({{ $t("not_seen") }})
+              ({{ $t('not_seen') }})
             </span>
 
             <span v-show="item.finished && item.watched">
-              ({{ $t("seen") }})
+              ({{ $t('seen') }})
             </span>
           </span>
 
@@ -38,7 +38,7 @@
             class="text-green-600 font-semibold"
             v-show="item.finished && item.schedule_time"
           >
-            {{ $t("finished") }}
+            {{ $t('finished') }}
           </span>
 
           <span
@@ -50,7 +50,7 @@
           </span>
 
           <span class="text-black font-semibold" v-show="item.is_remove">
-            {{ $t("clear_calendar") }}
+            {{ $t('clear_calendar') }}
           </span>
         </div>
         <div class="flex items-center gap-2">
@@ -79,16 +79,16 @@
 </template>
 
 <script setup lang="ts">
-import {Resful} from "@/services/resful";
+import { Resful } from '@/services/resful'
 //* import library
-import WIDGET from "bbh-chatbox-widget-js-sdk";
+import WIDGET from 'bbh-chatbox-widget-js-sdk'
 
 //* import icon
-import CalendarIcon from "@/assets/calendar.svg";
-import {onMounted, ref} from "vue";
-import {useI18n} from "vue-i18n";
+import CalendarIcon from '@/assets/calendar.svg'
+import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const {t} = useI18n();
+const { t } = useI18n()
 
 // const schedule_labels = [
 //   {
@@ -122,86 +122,86 @@ const {t} = useI18n();
 // ];
 const schedule_labels = [
   {
-    name: "note",
-    value: "note",
+    name: 'note',
+    value: 'note',
   },
-];
+]
 
 // const time_selected = ref<string>("");
-const is_show_edit = ref<boolean>(false);
-const note_list = ref<any>([]);
+const is_show_edit = ref<boolean>(false)
+const note_list = ref<any>([])
 
 onMounted(() => {
-  getNoteList();
+  getNoteList()
   WIDGET.onEvent(async () => {
-    access_token = WIDGET.access_token as string;
-    getNoteList();
-  });
-});
+    access_token = WIDGET.access_token as string
+    getNoteList()
+  })
+})
 
 function convertTimeList(value: number) {
-  if (!value) return "";
-  const date = new Date(value);
-  const hours = ("0" + date.getHours()).slice(-2);
-  const minutes = ("0" + date.getMinutes()).slice(-2);
-  const day = ("0" + date.getDate()).slice(-2);
-  const month = ("0" + (date.getMonth() + 1)).slice(-2); // Month is zero-indexed
-  const year = date.getFullYear();
+  if (!value) return ''
+  const date = new Date(value)
+  const hours = ('0' + date.getHours()).slice(-2)
+  const minutes = ('0' + date.getMinutes()).slice(-2)
+  const day = ('0' + date.getDate()).slice(-2)
+  const month = ('0' + (date.getMonth() + 1)).slice(-2) // Month is zero-indexed
+  const year = date.getFullYear()
 
-  return `${hours}:${minutes} - ${day}/${month}/${year}`;
+  return `${hours}:${minutes} - ${day}/${month}/${year}`
 }
 function showTimeMore(value: number) {
-  if (!value) return "";
-  if (value < Date.now()) return "";
-  let seconds = Math.floor((value - Date.now()) / 1000);
-  let interval = seconds / 31536000;
+  if (!value) return ''
+  if (value < Date.now()) return ''
+  let seconds = Math.floor((value - Date.now()) / 1000)
+  let interval = seconds / 31536000
   if (interval > 1) {
-    return Math.floor(interval) + " " + t("year_more");
+    return Math.floor(interval) + ' ' + t('year_more')
   }
-  interval = seconds / 2592000;
+  interval = seconds / 2592000
   if (interval > 1) {
-    return Math.floor(interval) + " " + t("month_more");
+    return Math.floor(interval) + ' ' + t('month_more')
   }
-  interval = seconds / 86400;
+  interval = seconds / 86400
   if (interval > 1) {
-    return Math.floor(interval) + " " + t("day_more");
+    return Math.floor(interval) + ' ' + t('day_more')
   }
-  interval = seconds / 3600;
+  interval = seconds / 3600
   if (interval > 1) {
-    return Math.floor(interval) + " " + t("hour_more");
+    return Math.floor(interval) + ' ' + t('hour_more')
   }
-  interval = seconds / 60;
+  interval = seconds / 60
   if (interval > 1) {
-    return Math.floor(interval) + " " + t("minute_more");
+    return Math.floor(interval) + ' ' + t('minute_more')
   }
 }
 
 function getNoteList() {
   Resful.post(
     {
-      access_token: globalThis.access_token || "",
+      access_token: globalThis.access_token || '',
       body: {},
-      path: "/v1/note/read",
+      path: '/v1/note/read',
     },
     (e: any, r: any) => {
-      if (e) return console.log(e);
+      if (e) return console.log(e)
       // console.log(r.data.data);
 
       note_list.value = r.data.data.map((item: any) => {
         schedule_labels.map((item1) => {
           if (item.label === item1.value) {
-            item.label = item1.name;
+            item.label = item1.name
           }
-        });
+        })
 
         if (item.fb_staff_id) {
-          item.avatar = `https://graph.facebook.com/${item.fb_staff_id}/picture`;
+          item.avatar = `https://graph.facebook.com/${item.fb_staff_id}/picture`
         }
 
-        return item;
-      });
+        return item
+      })
     }
-  );
+  )
 }
 </script>
 
