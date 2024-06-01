@@ -1,32 +1,28 @@
 <template>
   <div>
-    <div
-      class="body-schedule-list h-56 overflow-y-auto scrollbar-thin flex flex-col gap-2"
-      v-show="!is_show_edit"
-    >
-      <div
-        class="px-3 py-2 flex flex-col gap-1 bg-slate-100 w-[99%] rounded-lg font-medium text-xs text-slate-500"
-        v-for="(item, index) in note_list"
-        :key="index"
-        v-show="note_list.length"
-      >
+    <div class="body-schedule-list h-56 overflow-y-auto scrollbar-thin flex flex-col gap-2" v-show="!is_show_edit">
+      <div class="px-3 py-2 flex flex-col gap-1 bg-slate-100 w-[99%] rounded-lg font-medium text-xs text-slate-500"
+        v-for="(item, index) in note_list" :key="index" v-show="note_list.length">
         <div class="flex justify-between">
-          <span
-            :class="{
-              'font-semibold': !item.finished && item.schedule_time,
-            }"
-          >
+          <span :class="{
+            'font-semibold': !item.finished && item.schedule_time,
+          }">
             <!-- <span v-if="item.staff_name">
                                 {{ item.staff_name }} -
                             </span> -->
 
             {{ item.createdAt ? convertTimeList(item.createdAt) : '' }}
 
+<<<<<<< HEAD
             <span
               class="text-red-500 font-semibold"
               v-show="item.finished && !item.watched"
             >
               ({{ $t('not_seen') }})
+=======
+            <span class="text-red-500 font-semibold" v-show="item.finished && !item.watched">
+              ({{ $t("not_seen") }})
+>>>>>>> 891e938561e8b9cea2a9d09717a23beaa6256f4e
             </span>
 
             <span v-show="item.finished && item.watched">
@@ -34,17 +30,19 @@
             </span>
           </span>
 
+<<<<<<< HEAD
           <span
             class="text-green-600 font-semibold"
             v-show="item.finished && item.schedule_time"
           >
             {{ $t('finished') }}
+=======
+          <span class="text-green-600 font-semibold" v-show="item.finished && item.schedule_time">
+            {{ $t("finished") }}
+>>>>>>> 891e938561e8b9cea2a9d09717a23beaa6256f4e
           </span>
 
-          <span
-            class="text-orange-600 font-semibold"
-            v-show="!item.finished && item.schedule_time && !item.is_remove"
-          >
+          <span class="text-orange-600 font-semibold" v-show="!item.finished && item.schedule_time && !item.is_remove">
             <!-- {{item.schedule_time | time_more}} -->
             {{ showTimeMore(item.schedule_time) }}
           </span>
@@ -56,21 +54,16 @@
         <div class="flex items-center gap-2">
           <img :src="CalendarIcon" />
           <div>
-            <p
-              :class="{
-                'line-through': item.finished,
-                'text-red-500': !item.watched && item.finished,
-              }"
-            >
+            <p :class="{
+              'line-through': item.finished,
+              'text-red-500': !item.watched && item.finished,
+            }">
               {{ item.content }}
             </p>
           </div>
         </div>
       </div>
-      <div
-        class="w-full h-60 flex items-center justify-center flex-col"
-        v-show="!note_list.length"
-      >
+      <div class="w-full h-60 flex items-center justify-center flex-col" v-show="!note_list.length">
         <img class="w-24" src="./../assets/empty.svg" alt="" />
         <p class="text-gray-600">Chưa có ghi chú</p>
       </div>
@@ -79,16 +72,28 @@
 </template>
 
 <script setup lang="ts">
+<<<<<<< HEAD
 import { Resful } from '@/services/resful'
+=======
+import { Resful } from "@/services/resful";
+>>>>>>> 891e938561e8b9cea2a9d09717a23beaa6256f4e
 //* import library
 import WIDGET from 'bbh-chatbox-widget-js-sdk'
 
 //* import icon
+<<<<<<< HEAD
 import CalendarIcon from '@/assets/calendar.svg'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+=======
+import CalendarIcon from "@/assets/calendar.svg";
+import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+>>>>>>> 891e938561e8b9cea2a9d09717a23beaa6256f4e
 
 // const schedule_labels = [
 //   {
@@ -134,10 +139,17 @@ const note_list = ref<any>([])
 onMounted(() => {
   getNoteList()
   WIDGET.onEvent(async () => {
+<<<<<<< HEAD
     access_token = WIDGET.access_token as string
     getNoteList()
   })
 })
+=======
+    globalThis.access_token = WIDGET.access_token as string;
+    getNoteList();
+  });
+});
+>>>>>>> 891e938561e8b9cea2a9d09717a23beaa6256f4e
 
 function convertTimeList(value: number) {
   if (!value) return ''

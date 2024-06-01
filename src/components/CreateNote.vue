@@ -2,18 +2,11 @@
   <div class="text-sm flex flex-col gap-2.5">
     <div class="flex gap-2 justify-end cursor-pointer">
       <div class="flex gap-2 w-fit" @click="toogleRemind()">
-        <input
-          type="checkbox"
-          class="accent-black scale-125 cursor-pointer"
-          v-model="is_remind"
-        />
+        <input type="checkbox" class="accent-black scale-125 cursor-pointer" v-model="is_remind" />
         <p class="text-black font-medium">Nhắc lịch</p>
       </div>
     </div>
-    <div
-      class="select-calendar grid grid-cols-2 gap-2 text-gray-500"
-      v-if="is_remind"
-    >
+    <div class="select-calendar grid grid-cols-2 gap-2 text-gray-500" v-if="is_remind">
       <div class="col-span-1 flex flex-col gap-1">
         <label class="text-xs">
           Chọn thời gian
@@ -21,19 +14,11 @@
         </label>
         <!-- :shortcuts="shortcuts"
           open.sync="open_calendar" -->
-        <date-picker
-          prefix-class="xmx"
-          placeholder="Không lập lịch"
-          class="w-full h-full"
-          v-model:value="date_picker"
-          value-type="timestamp"
-          :type="type_date_picker"
-          :format="date_picker_format"
+        <date-picker prefix-class="xmx" placeholder="Không lập lịch" class="w-full h-full" v-model:value="date_picker"
+          value-type="timestamp" :type="type_date_picker" :format="date_picker_format"
           :show-week-number="show_week_number"
-          input-class="w-full border-2 pt-1 pb-1.5 px-3 rounded outline-none placeholder:text-gray-500"
-          :confirm="true"
-          confirm-text="Xác nhận"
-        >
+          input-class="w-full border-2 pt-1 pb-1.5 px-3 rounded outline-none placeholder:text-gray-500" :confirm="true"
+          confirm-text="Xác nhận">
           <!-- <template #footer>
             <button class="bg-orange-600 text-white px-2 rounded-md">
               Chọn
@@ -42,6 +27,7 @@
         </date-picker>
       </div>
       <div class="col-span-1 flex flex-col gap-1">
+<<<<<<< HEAD
         <label class="text-xs">{{ $t('frequency') }}</label>
         <select
           v-model="frequency_selected"
@@ -53,6 +39,11 @@
             :value="item.label"
             class="text-black"
           >
+=======
+        <label class="text-xs">{{ $t("frequency") }}</label>
+        <select v-model="frequency_selected" class="border-2 px-3 rounded outline-none h-full">
+          <option v-for="(item, index) in FREQUENCY" :key="index" :value="item.label" class="text-black">
+>>>>>>> 891e938561e8b9cea2a9d09717a23beaa6256f4e
             {{ $t(item.value) }}
           </option>
         </select>
@@ -65,12 +56,18 @@
       <div class="w-1/4 text-center cursor-pointer hover:font-bold">
         {{ $t('close') }}
       </div>
+<<<<<<< HEAD
       <div
         class="w-3/4 text-center text-white py-2 rounded-md cursor-pointer hover:shadow-md hover:shadow-black/20"
         :class="props.input_content ? 'bg-orange-600' : 'bg-gray-400'"
         @click="createNewNote()"
       >
         {{ $t('save') }}
+=======
+      <div class="w-3/4 text-center text-white py-2 rounded-md cursor-pointer hover:shadow-md hover:shadow-black/20"
+        :class="props.input_content ? 'bg-orange-600' : 'bg-gray-400'" @click="createNewNote()">
+        {{ $t("save") }}
+>>>>>>> 891e938561e8b9cea2a9d09717a23beaa6256f4e
       </div>
     </div>
   </div>
@@ -78,6 +75,7 @@
 
 <script setup lang="ts">
 //* import function
+<<<<<<< HEAD
 import { useCommonStore } from '@/services/stores'
 
 // * import library
@@ -88,6 +86,18 @@ import 'vue-datepicker-next/locale/vi'
 // * import constant
 import { FREQUENCY } from '@/services/constant/create_note'
 import { Resful } from '@/services/resful.js'
+=======
+import { useCommonStore } from "@/services/stores";
+
+// * import library
+import { ref, watch } from "vue";
+import DatePicker from "vue-datepicker-next";
+import "vue-datepicker-next/locale/vi.es";
+
+// * import constant
+import { FREQUENCY } from "@/services/constant/create_note";
+import { Resful } from "@/services/resful.js";
+>>>>>>> 891e938561e8b9cea2a9d09717a23beaa6256f4e
 
 const commonStore = useCommonStore()
 // * props
@@ -168,7 +178,11 @@ const createNewNote = () => {
   )
 }
 
+<<<<<<< HEAD
 defineExpose({ createNewNote })
+=======
+defineExpose({ createNewNote });
+>>>>>>> 891e938561e8b9cea2a9d09717a23beaa6256f4e
 </script>
 <style lang="scss">
 $namespace: 'xmx'; // change the 'mx' to 'xmx'. then <date-picker prefix-class="xmx" />
