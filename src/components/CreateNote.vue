@@ -80,7 +80,7 @@ import { useAppStore, useCommonStore } from '@/services/stores'
 // * import library
 import { ref, watch } from 'vue'
 import DatePicker from 'vue-datepicker-next'
-import 'vue-datepicker-next/locale/vi'
+import 'vue-datepicker-next/locale/vi.es'
 
 // * import constant
 import { FREQUENCY } from '@/services/constant/create_note'
