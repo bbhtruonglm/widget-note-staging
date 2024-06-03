@@ -19,23 +19,6 @@
           Chọn thời gian
           <span class="text-red-500">*</span>
         </label>
-        <!-- :shortcuts="shortcuts"
-          open.sync="open_calendar" -->
-        <!-- <date-picker
-          prefix-class="xmx"
-          placeholder="Không lập lịch"
-          class="w-full h-full"
-          v-model:value="date_picker"
-          value-type="timestamp"
-          :type="type_date_picker"
-          :format="date_picker_format"
-          input-class="w-full border-2 pt-1 pb-1.5 px-3 rounded outline-none placeholder:text-gray-500"
-          :confirm="true"
-          confirm-text="Xác nhận"
-          :editable="false"
-          :clearable="false"
-        >
-        </date-picker> -->
         <VueDatePicker
           v-model="date_picker"
           input-class-name="text-sm text-gray-500"
@@ -52,6 +35,7 @@
           :format="
             date_picker_format === 'custom' ? customFormat : date_picker_format
           "
+          menu-class-name="text-sm"
         >
         </VueDatePicker>
       </div>
@@ -232,19 +216,17 @@ async function createNewNote() {
 defineExpose({ createNewNote })
 </script>
 <style lang="scss">
-@media screen and (min-width: 768px) {
-  .dp__calendar_header_item {
-    height: auto;
-  }
-  .dp__menu_inner {
-    padding-bottom: 0;
-  }
-  .dp--year-select,
-  .dp__month_year_select {
-    height: auto;
-  }
-  .dp__calendar_row {
-    margin: 0;
-  }
+.dp__calendar_header_item {
+  height: auto;
+}
+.dp__menu_inner {
+  padding-bottom: 0;
+}
+.dp--year-select,
+.dp__month_year_select {
+  height: auto;
+}
+.dp__calendar_row {
+  margin: 0;
 }
 </style>

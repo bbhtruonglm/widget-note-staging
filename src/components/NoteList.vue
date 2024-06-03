@@ -80,7 +80,7 @@ import { convertTimeList } from '@/services/format/date'
 
 //* import library
 import WIDGET from 'bbh-chatbox-widget-js-sdk'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 //* import icon
