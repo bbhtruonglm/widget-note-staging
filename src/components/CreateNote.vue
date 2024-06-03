@@ -21,7 +21,7 @@
         </label>
         <!-- :shortcuts="shortcuts"
           open.sync="open_calendar" -->
-        <date-picker
+        <!-- <date-picker
           prefix-class="xmx"
           placeholder="Không lập lịch"
           class="w-full h-full"
@@ -32,8 +32,16 @@
           input-class="w-full border-2 pt-1 pb-1.5 px-3 rounded outline-none placeholder:text-gray-500"
           :confirm="true"
           confirm-text="Xác nhận"
+          :editable="false"
+          :clearable="false"
         >
-        </date-picker>
+        </date-picker> -->
+        <VueDatePicker
+          v-model:value="date_picker"
+          teleport-center
+          time-picker-inline
+        >
+        </VueDatePicker>
       </div>
       <div class="col-span-1 flex flex-col gap-1">
         <label class="text-xs">{{ $t('frequency') }}</label>
@@ -81,6 +89,9 @@ import { useAppStore, useCommonStore } from '@/services/stores'
 import { ref, watch } from 'vue'
 import DatePicker from 'vue-datepicker-next'
 import 'vue-datepicker-next/locale/vi.es'
+
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 
 // * import constant
 import { FREQUENCY } from '@/services/constant/create_note'
@@ -199,21 +210,23 @@ $namespace: 'xmx'; // change the 'mx' to 'xmx'. then <date-picker prefix-class="
 $default-color: #555;
 $primary-color: #f55600;
 @import 'vue-datepicker-next/scss/index.scss';
-.xmx-date-time {
-  height: calc(100vh - 50px);
-}
-.xmx-calendar-content {
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
-  scrollbar-width: thin;
-}
-.xmx-table thead {
-  // z-index: 1;
-  background: #ffffff;
-  position: sticky;
-  top: 0;
-}
-.xmx-time-content {
-  max-height: calc(100vh - 85px);
+@media screen and (min-width: 768px) {
+  .xmx-date-time {
+    height: 250px;
+  }
+  .xmx-calendar-content {
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .xmx-table thead {
+    // z-index: 1;
+    background: #ffffff;
+    position: sticky;
+    top: 0;
+  }
+  .xmx-time-content {
+    max-height: calc(100vh - 85px);
+  }
 }
 </style>
