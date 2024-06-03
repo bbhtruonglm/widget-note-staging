@@ -43,10 +43,8 @@ const create_note = ref<any>(null)
 
 /** hàm chuyển tab khi thay đổi nội dung ghi chú */
 const handleChangeInput = debounce(() => {
-  // nếu có nội dung ghi chú thi chuyển sang tab tạo ghi chú
-  if (appStore.note_content) return changeTab('CREATE_NEW')
-
-  // nếu không thì chuyển sang tab danh sách ghi chú
+  if (appStore.note_content) return
+  // khi xóa hết nội dung ghi chú thi chuyển sang tab danh sách ghi chú
   changeTab('NOTE_LIST')
 }, 500)
 
@@ -57,6 +55,8 @@ function changeTab(tab: string) {
 
 /** hàm bắt sự kiện nhấn shift + enter để tạo ghi chứ */
 function handleKeyUp(event: any) {
+  // nếu có nội dung ghi chú thi chuyển sang tab tạo ghi chú
+  if (appStore.note_content) changeTab('CREATE_NEW')
   // nếu khong shift + enter thi khong thuc hành
   if (!event.shiftKey || !(event.keyCode === 13)) return
 
