@@ -29,7 +29,7 @@
         <label class="text-xs">{{ $t('frequency') }}</label>
         <select
           v-model="frequency_selected"
-          class="border-2 px-3 rounded outline-none h-full"
+          class="border px-2.5 rounded outline-none h-full bg-white"
         >
           <option
             v-for="(item, index) in FREQUENCY"
@@ -78,7 +78,6 @@ import { FREQUENCY } from '@/services/constant/create_note'
 import { request } from '@/services/request'
 import { Toast } from '@/services/toast'
 import { useI18n } from 'vue-i18n'
-import { timestampToDate } from '@/services/format/date'
 
 //* store
 const appStore = useAppStore()
@@ -169,24 +168,3 @@ async function createNewNote() {
 // xuất hàm tạo ghi chú
 defineExpose({ createNewNote })
 </script>
-<style lang="scss">
-.custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-}
-/* Track */
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-/* Handle */
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
-}
-
-/* Handle on hover */
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-</style>
