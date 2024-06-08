@@ -1,7 +1,10 @@
 <template>
   <div class="text-sm flex flex-col gap-2.5">
     <div class="flex gap-2 justify-end cursor-pointer">
-      <div class="flex gap-2 w-fit" @click="toogleRemind()">
+      <div
+        class="flex gap-2 w-fit"
+        @click="toogleRemind()"
+      >
         <input
           type="checkbox"
           class="accent-black scale-125 cursor-pointer"
@@ -95,7 +98,7 @@ const { t } = useI18n()
 const emit = defineEmits(['update:input_content', 'changeTab'])
 
 /** tần suất được chọn */
-const frequency_selected = ref<string>('NONE')
+const frequency_selected = ref<string>(initFrequency())
 
 /** bật/tắt chế độ nhắc lịch */
 const is_remind = ref<boolean>(initIsRemind())
@@ -103,6 +106,17 @@ const is_remind = ref<boolean>(initIsRemind())
 /** ngày đặt lịch */
 const date_value = ref<Date>(initDate())
 const time_value = ref<{ hour: number; minute: number }>(initTime())
+
+/** hàm khởi tạo giá trị tần suất */
+function initFrequency() {
+  // index bằng -1 là đang ở chế độ sửa và có tần suất đặt lịch thì khởi tạo
+  if (
+    appStore.note_index !== -1 &&
+    appStore.note_list[appStore.note_index].frequency
+  )
+    return appStore.note_list[appStore.note_index].frequency || ''
+  return 'NONE'
+}
 
 /** hàm khởi tạo giá trị cho bật/tắt nhắc lịch */
 function initIsRemind() {
