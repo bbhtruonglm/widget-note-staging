@@ -173,7 +173,7 @@ function getDateTime(hour: number, minute: number, date: number) {
   }/${date_temp.getDate()}`
   let time_string = `${hour}:${minute}`
 
-  return new Date(time_string + ' ' + date_string).getTime()
+  return new Date(date_string + ' ' + time_string).getTime()
 }
 
 /** hàm tạo ghi chú mới */
