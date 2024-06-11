@@ -60,7 +60,7 @@
         :class="props.input_content ? 'bg-orange-600' : 'bg-gray-400'"
         @click="createNewNote()"
       >
-        {{ appStore.note_index !== -1 ? $t('update') : $t('save') }}
+        {{ appStore.isUpdateNote() ? $t('update') : $t('save') }}
       </div>
     </div>
   </div>
@@ -116,12 +116,12 @@ const time_value = ref<{ hour: number; minute: number }>(initTime())
 function initFrequency() {
   if (
     // kiểm tra xem có phải chế độ sửa không, nếu khác -1 là chế độ sửa
-    appStore.note_index !== -1 &&
+    appStore.isUpdateNote() &&
     //  kiểm tra có tồn tại tần suất không
-    appStore.note_list[appStore.note_index].frequency
+    appStore.selectedNote()?.frequency
   )
     // trả về giá trị tần suất của ghi chú chọn để sửa
-    return appStore.note_list[appStore.note_index].frequency || ''
+    return appStore.selectedNote()?.frequency || ''
   return 'NONE'
 }
 
@@ -129,9 +129,9 @@ function initFrequency() {
 function initIsRemind() {
   if (
     // kiểm tra xem có phải chế độ sửa không, nếu khác -1 là chế độ sửa
-    appStore.note_index !== -1 &&
+    appStore.isUpdateNote() &&
     // kiểm tra có tồn tại thời gian đặt lịch không
-    appStore.note_list[appStore.note_index].schedule_time
+    appStore.selectedNote()?.schedule_time
   )
     return true
   return false
@@ -141,11 +141,11 @@ function initIsRemind() {
 function initDate() {
   if (
     // kiểm tra xem có phải chế độ sửa không, nếu khác -1 là chế độ sửa
-    appStore.note_index !== -1 &&
+    appStore.isUpdateNote() &&
     // kiểm tra xem có tồn tại ngày đặt lịch không
-    appStore.note_list[appStore.note_index].schedule_time
+    appStore.selectedNote()?.schedule_time
   ) {
-    return new Date(appStore.note_list[appStore.note_index].schedule_time || 0)
+    return new Date(appStore.selectedNote()?.schedule_time || 0)
   }
   return getCurrentDate()
 }
@@ -156,15 +156,15 @@ function initTime() {
   let currrent_date = new Date()
   if (
     // kiểm tra xem có phải chế độ sửa không, nếu khác -1 là chế độ sửa
-    appStore.note_index !== -1 &&
+    appStore.isUpdateNote() &&
     // kiểm tra xem giờ đặt lịch có tồn tại không
-    appStore.note_list[appStore.note_index].schedule_hour &&
+    appStore.selectedNote()?.schedule_hour &&
     // kiểm tra xem phút đặt lịch có tồn tại không
-    appStore.note_list[appStore.note_index].schedule_minute
+    appStore.selectedNote()?.schedule_minute
   ) {
     return {
-      hour: appStore.note_list[appStore.note_index].schedule_hour || 0,
-      minute: appStore.note_list[appStore.note_index].schedule_minute || 0,
+      hour: appStore.selectedNote()?.schedule_hour || 0,
+      minute: appStore.selectedNote()?.schedule_minute || 0,
     }
   }
   // nếu không tồn tại trả về giờ và phút hiện tại
@@ -218,12 +218,9 @@ async function createNewNote() {
     let result = await request({
       // nếu số thứ tự của sửa ghi chú tồn tại thì sử dụng endpoint sửa
       // nếu không thì sử dụng endpoint tạo ghi chú
-      path: appStore.note_index !== -1 ? '/v1/note/update' : '/v1/note/create',
+      path: appStore.isUpdateNote() ? '/v1/note/update' : '/v1/note/create',
       body: {
-        _id:
-          appStore.note_index !== -1
-            ? appStore.note_list[appStore.note_index]._id
-            : null,
+        _id: appStore.isUpdateNote() ? appStore.selectedNote()?._id : null,
         label: 'note',
         content: props.input_content,
         schedule_time: is_remind.value
@@ -255,7 +252,7 @@ async function createNewNote() {
     appStore.is_loading = false
     // thông báo thành công
     $toast.success(
-      appStore.note_index !== -1 ? t('update_sucess') : t('create_new_success'),
+      appStore.isUpdateNote() ? t('update_sucess') : t('create_new_success'),
       'right',
       'top'
     )

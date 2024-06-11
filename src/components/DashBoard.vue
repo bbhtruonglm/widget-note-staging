@@ -41,7 +41,7 @@ import NoteList from './NoteList.vue'
 const appStore = useAppStore()
 
 /** ref tới component CreateNote */
-const create_note = ref<any>(null)
+const create_note = ref<InstanceType<typeof CreateNote>>()
 
 //lấy danh sách khi nhận thông báo từ chatbox
 WIDGET.onEvent(async () => {
@@ -53,7 +53,7 @@ onMounted(() => {
 })
 
 /** hàm chuyển tab */
-function changeTab(tab: string) {
+function changeTab(tab: 'NOTE_LIST' | 'CREATE_NEW') {
   appStore.tab_selected = tab
 }
 
@@ -69,7 +69,7 @@ function handleKeyUp(event: any) {
   if (!appStore.note_content) return
 
   // Sử dụng tham chiếu để gọi hàm createNewNote trong component con
-  create_note.value.createNewNote()
+  create_note.value?.createNewNote()
 }
 
 /** hàm lấy danh sách ghi chú */

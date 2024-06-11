@@ -95,38 +95,39 @@ function showTimeMore(value: number): string {
   if (!value) return ''
   if (value < Date.now()) return ''
 
+  /** số giây trong 1 năm */
+  const YEAR_SECONDS = 31536000
+  /** số giây trong 1 tháng */
+  const MONTH_SECONDS = 2592000
+  /** số giây trong 1 ngày */
+  const DAY_SECONDS = 86400
+  /** số giây trong 1 giờ */
+  const HOUR_SECONDS = 3600
+  /** số giây trong 1 phút */
+  const MINUTE_SECONDS = 60
+
   // chuyển thời gian còn lại sang giây
   let seconds = Math.floor((value - Date.now()) / 1000)
 
-  // tính số năm còn lại, 31536000 là số giây của 1 năm
-  let interval = seconds / 31536000
-  if (interval > 1) {
-    return Math.floor(interval) + ' ' + t('year_more')
-  }
+  // tính số năm còn lại
+  let interval = seconds / YEAR_SECONDS
+  if (interval > 1) return Math.floor(interval) + ' ' + t('year_more')
 
-  // tính số tháng còn lại, 2592000 là số giây của 1 tháng
-  interval = seconds / 2592000
-  if (interval > 1) {
-    return Math.floor(interval) + ' ' + t('month_more')
-  }
+  // tính số tháng còn lại
+  interval = seconds / MONTH_SECONDS
+  if (interval > 1) return Math.floor(interval) + ' ' + t('month_more')
 
-  // tính số ngày còn lại, 86400 là số giây của 1 ngày
-  interval = seconds / 86400
-  if (interval > 1) {
-    return Math.floor(interval) + ' ' + t('day_more')
-  }
+  // tính số ngày còn lại
+  interval = seconds / DAY_SECONDS
+  if (interval > 1) return Math.floor(interval) + ' ' + t('day_more')
 
-  // tính số giờ còn lại, 3600 là số giây của 1 giờ
-  interval = seconds / 3600
-  if (interval > 1) {
-    return Math.floor(interval) + ' ' + t('hour_more')
-  }
+  // tính số giờ còn lại
+  interval = seconds / HOUR_SECONDS
+  if (interval > 1) return Math.floor(interval) + ' ' + t('hour_more')
 
-  // tính số phút còn lại, 60 là số giây của 1 phút
-  interval = seconds / 60
-  if (interval > 1) {
-    return Math.floor(interval) + ' ' + t('minute_more')
-  }
+  // tính số phút còn lại
+  interval = seconds / MINUTE_SECONDS
+  if (interval > 1) return Math.floor(interval) + ' ' + t('minute_more')
 
   // nếu nhỏ hơn 60 giây thì không trả về gì
   return ''
