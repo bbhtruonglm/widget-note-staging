@@ -179,11 +179,11 @@ function getDateTime(hour: number, minute: number, date: number) {
 /** hàm tạo ghi chú mới */
 async function createNewNote() {
   try {
+    // nếu chưa nhập nội dung ghi chú thì không thực hiện
+    if (!props.input_content) return
     //bật loading
     appStore.is_loading = true
 
-    // nếu chưa nhập nội dung ghi chú thì không thực hiện
-    if (!props.input_content) return
     // call api tạo mới note
     let result = await request({
       path: appStore.note_index !== -1 ? '/v1/note/update' : '/v1/note/create',

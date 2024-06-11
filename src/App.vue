@@ -35,6 +35,7 @@ onMounted(async () => {
   WIDGET.onEvent(async () => {
     // ghi lại thông tin khách hàng mới
     commonStore.data_client = await WIDGET.decodeClient()
+    console.log('commonStore.data_client', commonStore.data_client)
   })
 })
 
