@@ -2,10 +2,7 @@
   <div id="app">
     <DashBoard v-if="!active_app" />
     <ActiveWidget v-if="active_app" />
-    <Loading
-      type="FULL"
-      v-if="appStore.is_loading"
-    />
+    <Loading type="FULL" v-if="appStore.is_loading" />
   </div>
 </template>
 
@@ -48,30 +45,50 @@ onMounted(() => {
 /** hàm lấy thông tin khách hàng */
 async function getDataClient() {
   try {
+    //bật loading
+    commonStore.is_loading_full_screen = true
+
     // lấy thông tin khách hàng
     commonStore.data_client = await WIDGET.decodeClient()
+
+    //tắt loading
+    commonStore.is_loading_full_screen = false
   } catch (error) {
     console.log('getDataClient', error)
+    //tắt loading
+    commonStore.is_loading_full_screen = false
   }
 }
 
 /** hàm active widget */
 async function activeApp() {
   try {
+    //bật loading
+    commonStore.is_loading_full_screen = true
+
     /** lấy thông tin của khách hàng */
     commonStore.data_client = await WIDGET.decodeClient()
+
     //nếu thành công thì không cho vào màn kích hoạt
     active_app.value = false
+
+    //tắt loading
+    commonStore.is_loading_full_screen = false
   } catch (error) {
     console.log('activeApp', error)
+
     // thông báo nếu scret key sai
     if (error === 'WRONG_SECRET_KEY') {
       $toast.error(
         'Secret key của ghi chú sai, vui lòng liên hệ với kỹ thuật viên'
       )
     }
+
     // nếu không lấy thành công thì chuyển sang màn kích hoạt
     active_app.value = true
+
+    //tắt loading
+    commonStore.is_loading_full_screen = false
   }
 }
 </script>

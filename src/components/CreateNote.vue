@@ -1,10 +1,7 @@
 <template>
   <div class="text-sm flex flex-col gap-2.5">
     <div class="flex gap-2 justify-end cursor-pointer">
-      <div
-        class="flex gap-2 w-fit"
-        @click="toogleRemind()"
-      >
+      <div class="flex gap-2 w-fit" @click="toogleRemind()">
         <input
           type="checkbox"
           class="accent-black scale-125 cursor-pointer"
@@ -209,11 +206,12 @@ function getDateTime(hour: number, minute: number, date: number): number {
 /** hàm tạo ghi chú mới */
 async function createNewNote() {
   try {
+    // nếu chưa nhập nội dung ghi chú thì không thực hiện
+    if (!props.input_content) return
+
     //bật loading
     appStore.is_loading = true
 
-    // nếu chưa nhập nội dung ghi chú thì không thực hiện
-    if (!props.input_content) return
     // call api tạo mới note hoặc sửa note
     let result = await request({
       // nếu số thứ tự của sửa ghi chú tồn tại thì sử dụng endpoint sửa
@@ -240,7 +238,7 @@ async function createNewNote() {
     if (!(result.code === 200)) throw result.message
 
     // kiểm tra có phải tạo mới ghi chú không
-    if (appStore.note_index === -1) {
+    if (!appStore.isUpdateNote()) {
       // thêm ghi chú mới tạo vào danh sách ghi chú
       appStore.note_list = [result.data, ...appStore.note_list]
     } else {
