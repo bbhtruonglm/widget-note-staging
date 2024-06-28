@@ -18,14 +18,11 @@ async function active() {
   try {
     // call API oauth
     await WIDGET.oAuth()
-    // thông báo kích hoạt thành công
     alert('Kích hoạt thành công')
   } catch (error) {
-    // thông báo kích hoạt không thành công
     alert('Kích hoạt không thành công thành công')
     console.log('oauth widget', error)
   }
-  // tắt cửa sổ kích hoạt
   window.close()
 }
 </script>

@@ -97,7 +97,6 @@
 </template>
 
 <script setup lang="ts">
-// TODO : chưa improve code
 //* import function
 import { scrollToSelected } from '@/services/scroll'
 import { timestampToDate } from '@/services/format/date'

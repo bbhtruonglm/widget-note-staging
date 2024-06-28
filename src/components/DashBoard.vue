@@ -47,15 +47,15 @@ import { useAppStore, useCommonStore } from '@/services/stores'
 import WIDGET from 'bbh-chatbox-widget-js-sdk'
 
 //* import components
-import CreateNote from '@/components/CreateNote.vue'
-import NoteList from '@/components/NoteList.vue'
+import CreateNote from './CreateNote.vue'
+import NoteList from './NoteList.vue'
 
 // stores
 const appStore = useAppStore()
 const commonStore = useCommonStore()
 
 /** ref tới component CreateNote */
-const create_note = ref<InstanceType<typeof CreateNote>>()
+const create_note = ref<any>(null)
 
 //lấy danh sách khi nhận thông báo từ chatbox
 WIDGET.onEvent(async () => {
@@ -71,19 +71,18 @@ function changeTab(tab: 'NOTE_LIST' | 'CREATE_NEW') {
   appStore.tab_selected = tab
 }
 
-/** hàm bắt sự kiện gõ phím ở ô nhập nội dung ghi chứ */
+/** hàm bắt sự kiện nhấn shift + enter để tạo ghi chứ */
 function handleKeyUp(event: any) {
   // nếu có nội dung ghi chú thi chuyển sang tab tạo ghi chú
   if (appStore.note_content) changeTab('CREATE_NEW')
-
-  // nếu không nhấn shift + enter thì không thực hiện gì
+  // nếu khong shift + enter thi khong thuc hành
   if (!event.shiftKey || !(event.keyCode === 13)) return
 
-  // nếu nhấn shift + enter và có nội dung ghi chứ thì tạo ghi chú
+  // nếu shift + enter và có nội dung ghi chứ thì tạo ghi chú
   if (!appStore.note_content) return
 
   // Sử dụng tham chiếu để gọi hàm createNewNote trong component con
-  create_note.value?.createNewNote()
+  create_note.value.createNewNote()
 }
 
 /** hàm lấy danh sách ghi chú */
@@ -103,7 +102,6 @@ async function getNoteList() {
     //tắt loading
     appStore.is_loading = false
 
-    //lưu danh sách ghi chú vào store
     appStore.note_list = result.data
   } catch (error) {
     console.log('get note list', error)

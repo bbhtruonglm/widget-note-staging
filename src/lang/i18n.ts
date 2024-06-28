@@ -1,4 +1,3 @@
-// TODO: chưa improve code
 import { createI18n } from 'vue-i18n'
 
 // lang
@@ -12,7 +11,7 @@ const en = enLang
 const us = enLang
 const th = thLang
 
-/** get lang from native app */
+/* get lang from native app */
 function getParameterByName(name: string, url = window.location.href) {
   name = name.replace(/[\[\]]/g, '\\$&')
   var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -22,7 +21,7 @@ function getParameterByName(name: string, url = window.location.href) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
-/** lấy kiểu ngôn ngữ ở localStorage */
+/* lấy kiểu ngôn ngữ ở localStorage */
 const getLang = () => {
   let lang =
     getParameterByName('locale') || localStorage.getItem('lang') || 'vi'

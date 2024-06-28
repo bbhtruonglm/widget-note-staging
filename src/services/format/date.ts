@@ -1,5 +1,5 @@
 /** chuyển thời gian dạng timstamp sang HH:mm  - DD/MM/YYYY */
-export function convertTimeList(value: string): string {
+export function convertTimeList(value: string) {
   // kiểm tra giá trị truyền vào có tồn tại hay không
   if (!value) return ''
   // lấy giá trị của ngày được truyền vào
@@ -18,16 +18,11 @@ export function convertTimeList(value: string): string {
   return `${hours}:${minutes} - ${day}/${month}/${year}`
 }
 
-/** hàm chuyển đổi timestamp sang string date dạng DD/MM/YYYY */
-export function timestampToDate(value: number): string {
+export function timestampToDate(value: number) {
   if (!value) return ''
-  // lấy giá trị date của ngày được truyền vào
   const date = new Date(value)
-  // lấy ngày của thời gian truyền vào
   const day = ('0' + date.getDate()).slice(-2)
-  // lấy tháng của thời gian truyền vào
-  const month = ('0' + (date.getMonth() + 1)).slice(-2)
-  // lấy năm của thời gian truyền vào
+  const month = ('0' + (date.getMonth() + 1)).slice(-2) // Month is zero-indexed
   const year = date.getFullYear()
   return `${day}/${month}/${year}`
 }
