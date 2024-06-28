@@ -7,7 +7,7 @@
           class="accent-black scale-125 cursor-pointer"
           v-model="is_remind"
         />
-        <p class="text-black font-medium">Nhắc lịch</p>
+        <p class="text-black font-medium select-none">Nhắc lịch</p>
       </div>
     </div>
     <div
@@ -44,7 +44,7 @@
     </div>
 
     <!-- Button  -->
-    <div class="w-full flex gap-2 items-center text-black font-medium">
+    <div class="w-full flex gap-2 items-center text-black font-medium mt-4">
       <!-- @click="toogle_modal()" -->
       <div
         class="w-1/4 text-center cursor-pointer hover:font-bold"
@@ -54,7 +54,11 @@
       </div>
       <div
         class="w-3/4 text-center text-white py-2 rounded-md cursor-pointer hover:shadow-md hover:shadow-black/20"
-        :class="props.input_content ? 'bg-orange-600' : 'bg-gray-400'"
+        :class="
+          props.input_content
+            ? 'bg-orange-600'
+            : 'bg-gray-400 cursor-not-allowed'
+        "
         @click="createNewNote()"
       >
         {{ appStore.isUpdateNote() ? $t('update') : $t('save') }}

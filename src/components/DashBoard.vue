@@ -3,6 +3,7 @@
     <div
       class="container h-full w-full md:w-[395px] md:h-[300px] text-sm px-3 py-2 flex flex-col gap-2 bg-white"
     >
+      <<<<<<< HEAD
       <textarea
         class="w-full min-h-14 border rounded-md pt-2 pb-5 px-3 outline-none text-sm resize-none"
         v-model="appStore.note_content"
@@ -13,6 +14,31 @@
       <!-- List tabs -->
       <NoteList v-if="appStore.tab_selected === 'NOTE_LIST'" />
 
+      =======
+      <div class="min-h-14 h-14 relative w-full">
+        <textarea
+          id="content_note"
+          class="w-full h-full border rounded-md py-1.5 pl-3 pr-9 outline-none text-sm resize-none placeholder:text-slate-400"
+          v-model="appStore.note_content"
+          :placeholder="`Tạo ghi chú mới đến ${commonStore.data_client?.public_profile?.client_name}`"
+          @keyup="handleKeyUp"
+        />
+        <label
+          v-if="!appStore.note_content"
+          class="absolute bottom-0 left-0 text-slate-400 px-3.5 py-1.5 -z-1"
+          for="content_note"
+        >
+          ( Nhấn Shift + Enter để tạo nhanh )
+        </label>
+        <img
+          :src="commonStore.getUserAvatar()"
+          class="w-6 h-6 absolute top-1 right-1 rounded-md"
+        />
+      </div>
+      <!-- List tabs -->
+      <NoteList v-if="appStore.tab_selected === 'NOTE_LIST'" />
+
+      >>>>>>> improve/ui
       <!-- Create tabs -->
       <CreateNote
         ref="create_note"
@@ -30,15 +56,16 @@ import { request } from '@/services/request'
 
 //* import library
 import { onMounted, ref } from 'vue'
-import { useAppStore } from '@/services/stores'
+import { useAppStore, useCommonStore } from '@/services/stores'
 import WIDGET from 'bbh-chatbox-widget-js-sdk'
 
 //* import components
-import CreateNote from './CreateNote.vue'
-import NoteList from './NoteList.vue'
+import CreateNote from '@/components/CreateNote.vue'
+import NoteList from '@/components/NoteList.vue'
 
 // stores
 const appStore = useAppStore()
+const commonStore = useCommonStore()
 
 /** ref tới component CreateNote */
 const create_note = ref<InstanceType<typeof CreateNote>>()
