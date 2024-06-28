@@ -16,6 +16,7 @@ export const request = async ({
       headers = {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
+        // lấy access token từ widget sdk
         token: WIDGET.access_token || '',
         key: globalThis.$env.secret_key,
         ...headers,

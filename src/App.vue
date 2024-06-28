@@ -9,47 +9,86 @@
 <script setup lang="ts">
 // * import function
 import { useAppStore, useCommonStore } from './services/stores'
+import { Toast } from '@/services/toast'
 // * import library
 import WIDGET from 'bbh-chatbox-widget-js-sdk'
 import { onMounted, ref } from 'vue'
+
 // * import component
 import DashBoard from './components/DashBoard.vue'
 import ActiveWidget from './components/ActiveWidget.vue'
 import Loading from './components/Loading.vue'
 
-let url_string = window.location.href
-let url = new URL(url_string)
-globalThis.access_token = url.searchParams.get('access_token')
-
-/** hàm check active widget */
-const active_app = ref<boolean>(false)
+// let url_string = window.location.href
+// let url = new URL(url_string)
+// globalThis.access_token = url.searchParams.get('access_token')
 
 // * store
 const appStore = useAppStore()
 const commonStore = useCommonStore()
 
-onMounted(async () => {
+// * khởi tạo hàm thông báo
+const $toast = new Toast()
+
+/** hàm check active widget */
+const active_app = ref<boolean>(false)
+
+onMounted(() => {
   // hàm kiểm tra xem đã kích hoạt chưa và chuyển đến màn tương ứng
   activeApp()
   // lắng nghe event từ merchant khi chuyển đoạn chat
-  WIDGET.onEvent(async () => {
+  WIDGET.onEvent(() => {
     // ghi lại thông tin khách hàng mới
-    commonStore.data_client = await WIDGET.decodeClient()
-    console.log('commonStore.data_client', commonStore.data_client)
+    getDataClient()
   })
 })
+/** hàm lấy thông tin khách hàng */
+async function getDataClient() {
+  try {
+    //bật loading
+    commonStore.is_loading_full_screen = true
+
+    // lấy thông tin khách hàng
+    commonStore.data_client = await WIDGET.decodeClient()
+
+    //tắt loading
+    commonStore.is_loading_full_screen = false
+  } catch (error) {
+    console.log('getDataClient', error)
+    //tắt loading
+    commonStore.is_loading_full_screen = false
+  }
+}
 
 /** hàm active widget */
 async function activeApp() {
   try {
+    //bật loading
+    commonStore.is_loading_full_screen = true
+
     /** lấy thông tin của khách hàng */
     commonStore.data_client = await WIDGET.decodeClient()
+
     //nếu thành công thì không cho vào màn kích hoạt
     active_app.value = false
+
+    //tắt loading
+    commonStore.is_loading_full_screen = false
   } catch (error) {
     console.log('activeApp', error)
+
+    // thông báo nếu scret key sai
+    if (error === 'WRONG_SECRET_KEY') {
+      $toast.error(
+        'Secret key của ghi chú sai, vui lòng liên hệ với kỹ thuật viên'
+      )
+    }
+
     // nếu không lấy thành công thì chuyển sang màn kích hoạt
     active_app.value = true
+
+    //tắt loading
+    commonStore.is_loading_full_screen = false
   }
 }
 </script>

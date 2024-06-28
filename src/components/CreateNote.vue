@@ -92,28 +92,47 @@ const props = defineProps({
   input_content: String,
 })
 
+// * khởi tạo thông báo
 const $toast = new Toast()
+
+//* i18n
 const { t } = useI18n()
 
 // * emits
 const emit = defineEmits(['update:input_content', 'changeTab'])
 
 /** tần suất được chọn */
-const frequency_selected = ref<string>('NONE')
+const frequency_selected = ref<string>(initFrequency())
 
 /** bật/tắt chế độ nhắc lịch */
 const is_remind = ref<boolean>(initIsRemind())
 
 /** ngày đặt lịch */
 const date_value = ref<Date>(initDate())
+
+/** giờ đặt lịch */
 const time_value = ref<{ hour: number; minute: number }>(initTime())
+
+/** hàm khởi tạo giá trị tần suất */
+function initFrequency() {
+  if (
+    // kiểm tra xem có phải chế độ sửa không, nếu khác -1 là chế độ sửa
+    appStore.isUpdateNote() &&
+    //  kiểm tra có tồn tại tần suất không
+    appStore.selectedNote()?.frequency
+  )
+    // trả về giá trị tần suất của ghi chú chọn để sửa
+    return appStore.selectedNote()?.frequency || ''
+  return 'NONE'
+}
 
 /** hàm khởi tạo giá trị cho bật/tắt nhắc lịch */
 function initIsRemind() {
-  // index bằng -1 là đang ở chế độ sửa và có thời gian đặt lịch thì khởi tạo là true
   if (
-    appStore.note_index !== -1 &&
-    appStore.note_list[appStore.note_index].schedule_time
+    // kiểm tra xem có phải chế độ sửa không, nếu khác -1 là chế độ sửa
+    appStore.isUpdateNote() &&
+    // kiểm tra có tồn tại thời gian đặt lịch không
+    appStore.selectedNote()?.schedule_time
   )
     return true
   return false
@@ -121,36 +140,36 @@ function initIsRemind() {
 
 /** hàm khởi tạo giá trị cho ngày đặt lịch */
 function initDate() {
-  // index bằng -1 là đang ở chế độ sửa và có thời gian đặt lịch thì khởi tạo
-  //là thời gian đặt lịch đó
-
   if (
-    appStore.note_index !== -1 &&
-    appStore.note_list[appStore.note_index].schedule_time
+    // kiểm tra xem có phải chế độ sửa không, nếu khác -1 là chế độ sửa
+    appStore.isUpdateNote() &&
+    // kiểm tra xem có tồn tại ngày đặt lịch không
+    appStore.selectedNote()?.schedule_time
   ) {
-    return new Date(appStore.note_list[appStore.note_index].schedule_time || 0)
+    return new Date(appStore.selectedNote()?.schedule_time || 0)
   }
-
   return getCurrentDate()
 }
 
 /** hàm khởi tạo giá trị cho thời gian đặt lịch */
 function initTime() {
+  // lấy thời gian hiện tại
+  let currrent_date = new Date()
   if (
-    appStore.note_index !== -1 &&
-    appStore.note_list[appStore.note_index].schedule_time
+    // kiểm tra xem có phải chế độ sửa không, nếu khác -1 là chế độ sửa
+    appStore.isUpdateNote() &&
+    // kiểm tra xem giờ đặt lịch có tồn tại không
+    appStore.selectedNote()?.schedule_hour &&
+    // kiểm tra xem phút đặt lịch có tồn tại không
+    appStore.selectedNote()?.schedule_minute
   ) {
     return {
-      hour: new Date(
-        appStore.note_list[appStore.note_index].schedule_time || 0
-      ).getHours(),
-      minute: new Date(
-        appStore.note_list[appStore.note_index].schedule_time || 0
-      ).getMinutes(),
+      hour: appStore.selectedNote()?.schedule_hour || 0,
+      minute: appStore.selectedNote()?.schedule_minute || 0,
     }
   }
-
-  return { hour: new Date().getHours(), minute: new Date().getMinutes() }
+  // nếu không tồn tại trả về giờ và phút hiện tại
+  return { hour: currrent_date.getHours(), minute: currrent_date.getMinutes() }
 }
 
 /** hàm bật/tắt nhắc lịch */
@@ -160,8 +179,11 @@ function toogleRemind() {
 
 /** hàm đóng tab tạo mới ghi chú */
 function closeCreate() {
+  // thiết lập nội dung của ô nhập nội dung ghi chú về trống
   emit('update:input_content', '')
+  // chuyển sáng tab danh sách ghi chú
   emit('changeTab', 'NOTE_LIST')
+  // xóa số thứ tự của ghi chú nếu đang sửa 1 ghi chú nào đó
   appStore.note_index = -1
 }
 
@@ -170,13 +192,18 @@ function getCurrentDate() {
   return new Date()
 }
 
-function getDateTime(hour: number, minute: number, date: number) {
+/** hàm tạo thời gian đặt lịch với giờ và ngày đã chọn */
+function getDateTime(hour: number, minute: number, date: number): number {
+  // chuyển từ timestamp sang Date
   let date_temp = new Date(date)
+  // tạo chuỗi date có dạng yyyy/mm/dd
   let date_string = `${date_temp.getFullYear()}/${
     date_temp.getMonth() + 1
   }/${date_temp.getDate()}`
+  // tao chuỗi time có dạng hh:mm
   let time_string = `${hour}:${minute}`
 
+  // trả về giá trị timestamp của ngày và giờ được truyền vào
   return new Date(date_string + ' ' + time_string).getTime()
 }
 
@@ -185,17 +212,17 @@ async function createNewNote() {
   try {
     // nếu chưa nhập nội dung ghi chú thì không thực hiện
     if (!props.input_content) return
+
     //bật loading
     appStore.is_loading = true
 
-    // call api tạo mới note
+    // call api tạo mới note hoặc sửa note
     let result = await request({
-      path: appStore.note_index !== -1 ? '/v1/note/update' : '/v1/note/create',
+      // nếu số thứ tự của sửa ghi chú tồn tại thì sử dụng endpoint sửa
+      // nếu không thì sử dụng endpoint tạo ghi chú
+      path: appStore.isUpdateNote() ? '/v1/note/update' : '/v1/note/create',
       body: {
-        _id:
-          appStore.note_index !== -1
-            ? appStore.note_list[appStore.note_index]._id
-            : null,
+        _id: appStore.isUpdateNote() ? appStore.selectedNote()?._id : null,
         label: 'note',
         content: props.input_content,
         schedule_time: is_remind.value
@@ -214,8 +241,8 @@ async function createNewNote() {
     })
     if (!(result.code === 200)) throw result.message
 
-    // kiểm tra có phải tạo mới ghi chứ không
-    if (appStore.note_index === -1) {
+    // kiểm tra có phải tạo mới ghi chú không
+    if (!appStore.isUpdateNote()) {
       // thêm ghi chú mới tạo vào danh sách ghi chú
       appStore.note_list = [result.data, ...appStore.note_list]
     } else {
@@ -225,8 +252,9 @@ async function createNewNote() {
 
     //tắt loading
     appStore.is_loading = false
+    // thông báo thành công
     $toast.success(
-      appStore.note_index !== -1 ? t('update_sucess') : t('create_new_success'),
+      appStore.isUpdateNote() ? t('update_sucess') : t('create_new_success'),
       'right',
       'top'
     )
@@ -234,6 +262,7 @@ async function createNewNote() {
     closeCreate()
   } catch (error) {
     console.log(error)
+    // thông báo thất bại
     $toast.error('Tạo thất bại', 'right', 'top')
     // tắt loading
     appStore.is_loading = false
