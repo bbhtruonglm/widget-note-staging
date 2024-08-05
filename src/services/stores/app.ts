@@ -12,7 +12,8 @@ export const useAppStore = defineStore('app_store', () => {
   const note_list = ref<INote[]>([])
   /** index của note đang sửa */
   const note_index = ref<number>(-1) // bằng -1 là tạo mới
-
+  /** tự động tạo đặt lịch từ chat AI */
+  const is_auto_create = ref<boolean>(false)
   /** hàm kiểm tra có phải chế độ sửa ghi chú không */
   function isUpdateNote() {
     return note_index.value !== -1
@@ -29,6 +30,7 @@ export const useAppStore = defineStore('app_store', () => {
     tab_selected,
     note_list,
     note_index,
+    is_auto_create,
     isUpdateNote,
     selectedNote,
   }
