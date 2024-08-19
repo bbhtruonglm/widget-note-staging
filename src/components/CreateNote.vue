@@ -11,11 +11,11 @@
       </div>
     </div>
     <div
-      class="select-calendar grid grid-cols-2 gap-2 text-gray-500"
+      class="select-calendar grid grid-cols-2 gap-2"
       v-if="is_remind"
     >
       <div class="col-span-1 flex flex-col gap-1">
-        <label class="text-xs">
+        <label class="text-xs text-gray-500">
           Chọn thời gian
           <span class="text-red-500">*</span>
         </label>
@@ -26,7 +26,7 @@
         />
       </div>
       <div class="col-span-1 flex flex-col gap-1">
-        <label class="text-xs">{{ $t('frequency') }}</label>
+        <label class="text-xs text-gray-500">{{ $t('frequency') }}</label>
         <select
           v-model="frequency_selected"
           class="border px-2.5 rounded outline-none h-full bg-white"

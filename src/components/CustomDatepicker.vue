@@ -3,7 +3,7 @@
     <VueDatePicker
       :disabled="props.frequency_selected === 'EVERY_DAY'"
       v-model="date_value"
-      input-class-name="border-1 outline-none h-full text-sm text-gray-500 px-2 text-center"
+      input-class-name="border-1 outline-none h-full text-sm px-2 text-center"
       teleport-center
       :enable-time-picker="false"
       :day-names="['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"

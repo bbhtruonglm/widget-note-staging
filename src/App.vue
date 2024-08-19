@@ -36,14 +36,6 @@ const $toast = new Toast()
 const active_app = ref<boolean>(false)
 
 onMounted(() => {
-  let note_content = queryString('note')
-  let date_create = queryString('datetime')
-  if (note_content || (date_create && checkDate(date_create))) {
-    //chuyển màn tạo ghi chú
-    appStore.tab_selected = 'CREATE_NEW'
-    appStore.is_auto_create = true
-  }
-
   // hàm kiểm tra xem đã kích hoạt chưa và chuyển đến màn tương ứng
   activeApp()
   // lắng nghe event từ merchant khi chuyển đoạn chat
@@ -51,7 +43,28 @@ onMounted(() => {
     // ghi lại thông tin khách hàng mới
     getDataClient()
   })
+  autoCreate()
 })
+
+/** hàm tự động tạo ghi chú */
+function autoCreate(){
+  let note_content = queryString('note')
+  let date_create = queryString('datetime')
+  if(!note_content && !date_create) return
+
+  /** hợp lệ của thời gian */
+  let is_date_valid = date_create && checkDate(date_create)
+
+  if(!is_date_valid){
+    $toast.warning('Thời gian hiện tại đã có thời gian mà bạn hẹn lịch')
+  }
+
+  if (note_content || is_date_valid) {
+    //chuyển màn tạo ghi chú
+    appStore.tab_selected = 'CREATE_NEW'
+    appStore.is_auto_create = true
+  }
+}
 
 /** hàm lấy thông tin khách hàng */
 async function getDataClient() {
