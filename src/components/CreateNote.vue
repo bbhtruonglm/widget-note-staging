@@ -71,7 +71,7 @@
 //* import function
 import { useAppStore, useCommonStore } from '@/services/stores'
 import { request } from '@/services/request'
-
+import { add } from 'date-fns/add'
 
 
 // * import library
@@ -87,6 +87,7 @@ import CustomDatepicker from '@/components/CustomDatepicker.vue'
 
 // * import constant
 import { FREQUENCY } from '@/services/constant/create_note'
+
 
 //* store
 const appStore = useAppStore()
@@ -127,20 +128,30 @@ onMounted(() => {
     // set nội dung
     appStore.note_content = note_content?.replace('\\n', '\n') || ''
 
-    if(param_date && checkDate(param_date)){
-      // bật nhắc lịch
-      is_remind.value = true
-  
+  // tắt cờ khởi tạo data từ param
+    appStore.is_auto_create = false
+
+    if(!param_date) return
+
+    // bật nhắc lịch
+    is_remind.value = true
+
+    // nếu thời gian hẹn lịch lớn hơn thời gian hiện tại thì lưu lại
+    if(checkDate(param_date)){
       // set thời gian
       date_value.value = new Date(Number(param_date))
-      time_value.value = {
+    }
+    // không thì sẽ set thời gian hẹn lịch là 1 giờ so với thời gian hiện tại
+    else{
+      // set thời gian
+      date_value.value = add(new Date(), { hours:1 })
+    }
+
+    // set giờ
+    time_value.value = {
         hour: getHours(date_value.value),
         minute: getMinutes(date_value.value),
       }
-    }
-
-    // tắt cờ khởi tạo data từ param
-    appStore.is_auto_create = false
   }
 })
 

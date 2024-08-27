@@ -10,7 +10,7 @@
 // * import function
 import { useAppStore, useCommonStore } from './services/stores'
 import { Toast } from '@/services/toast'
-import { queryString, checkDate } from './services/helper'
+import { queryString } from './services/helper'
 
 // * import library
 import WIDGET from 'bbh-chatbox-widget-js-sdk'
@@ -53,11 +53,7 @@ function autoCreate(){
   if(!note_content && !date_create) return
 
   /** hợp lệ của thời gian */
-  let is_date_valid = date_create && checkDate(date_create)
-
-  if(!is_date_valid){
-    $toast.warning('Thời gian hiện tại đã có thời gian mà bạn hẹn lịch')
-  }
+  let is_date_valid = date_create
 
   if (note_content || is_date_valid) {
     //chuyển màn tạo ghi chú
