@@ -8,7 +8,7 @@
           id="content_note"
           class="w-full h-full border rounded-md py-1.5 pl-3 pr-9 outline-none text-sm resize-none placeholder:text-slate-400"
           v-model="appStore.note_content"
-          :placeholder="`Tạo ghi chú mới đến ${commonStore.data_client?.public_profile?.client_name}`"
+          :placeholder="`${$t('placeholder_create_new')} ${commonStore.data_client?.public_profile?.client_name}`"
           @keyup="handleKeyUp"
         />
         <label
@@ -16,7 +16,7 @@
           class="absolute bottom-0 left-0 text-slate-400 px-3.5 py-1.5 -z-1"
           for="content_note"
         >
-          ( Nhấn Shift + Enter để tạo nhanh )
+          ( {{ $t('guide') }} )
         </label>
         <img
           :src="commonStore.getUserAvatar()"

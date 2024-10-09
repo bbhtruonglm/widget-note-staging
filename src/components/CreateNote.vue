@@ -1,22 +1,23 @@
 <template>
   <div class="text-sm flex flex-col gap-2.5">
     <div class="flex gap-2 justify-end cursor-pointer">
-      <div class="flex gap-2 w-fit" @click="toogleRemind()">
+      <label class="inline-flex items-center cursor-pointer">
         <input
           type="checkbox"
-          class="accent-black scale-125 cursor-pointer"
+          value=""
+          class="sr-only peer"
           v-model="is_remind"
         />
-        <p class="text-black font-medium select-none">Nhắc lịch</p>
-      </div>
+        <div
+          class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"
+        ></div>
+        <span class="ms-3 text-sm font-medium">{{ $t('reminder') }}</span>
+      </label>
     </div>
-    <div
-      class="select-calendar grid grid-cols-2 gap-2"
-      v-if="is_remind"
-    >
-      <div class="col-span-1 flex flex-col gap-1">
+    <div class="select-calendar flex gap-2" v-if="is_remind">
+      <div class="w-7/12 flex flex-col gap-1">
         <label class="text-xs text-gray-500">
-          Chọn thời gian
+          {{ $t('time') }}
           <span class="text-red-500">*</span>
         </label>
         <CustomDatepicker
@@ -25,7 +26,7 @@
           :frequency_selected="frequency_selected"
         />
       </div>
-      <div class="col-span-1 flex flex-col gap-1">
+      <div class="w-5/12 flex flex-col gap-1">
         <label class="text-xs text-gray-500">{{ $t('frequency') }}</label>
         <select
           v-model="frequency_selected"
@@ -55,9 +56,7 @@
       <div
         class="w-3/4 text-center text-white py-2 rounded-md cursor-pointer hover:shadow-md hover:shadow-black/20"
         :class="
-          props.input_content
-            ? 'bg-orange-600'
-            : 'bg-gray-400 cursor-not-allowed'
+          props.input_content ? 'bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
         "
         @click="createNewNote()"
       >
@@ -73,7 +72,6 @@ import { useAppStore, useCommonStore } from '@/services/stores'
 import { request } from '@/services/request'
 import { add } from 'date-fns/add'
 
-
 // * import library
 import { ref, onMounted } from 'vue'
 import { Toast } from '@/services/toast'
@@ -87,7 +85,6 @@ import CustomDatepicker from '@/components/CustomDatepicker.vue'
 
 // * import constant
 import { FREQUENCY } from '@/services/constant/create_note'
-
 
 //* store
 const appStore = useAppStore()
@@ -124,37 +121,36 @@ onMounted(() => {
   let param_date = queryString('datetime')
   let note_content = queryString('note')
   // nếu có nội dung từ param thì sẽ lấy thêm các data từ đó để khởi tạo ghi chú
-  if (appStore.is_auto_create) {    
+  if (appStore.is_auto_create) {
     // set nội dung
     appStore.note_content = note_content?.replace('\\n', '\n') || ''
 
-  // tắt cờ khởi tạo data từ param
+    // tắt cờ khởi tạo data từ param
     appStore.is_auto_create = false
 
-    if(!param_date) return
+    if (!param_date) return
 
     // bật nhắc lịch
     is_remind.value = true
 
     // nếu thời gian hẹn lịch lớn hơn thời gian hiện tại thì lưu lại
-    if(checkDate(param_date)){
+    if (checkDate(param_date)) {
       // set thời gian
       date_value.value = new Date(Number(param_date))
     }
     // không thì sẽ set thời gian hẹn lịch là 1 giờ so với thời gian hiện tại
-    else{
+    else {
       // set thời gian
-      date_value.value = add(new Date(), { hours:1 })
+      date_value.value = add(new Date(), { hours: 1 })
     }
 
     // set giờ
     time_value.value = {
-        hour: getHours(date_value.value),
-        minute: getMinutes(date_value.value),
-      }
+      hour: getHours(date_value.value),
+      minute: getMinutes(date_value.value),
+    }
   }
 })
-
 
 /** hàm khởi tạo giá trị tần suất */
 function initFrequency() {
@@ -213,11 +209,6 @@ function initTime() {
   }
   // nếu không tồn tại trả về giờ và phút hiện tại
   return { hour: currrent_date.getHours(), minute: currrent_date.getMinutes() }
-}
-
-/** hàm bật/tắt nhắc lịch */
-function toogleRemind() {
-  is_remind.value = !is_remind.value
 }
 
 /** hàm đóng tab tạo mới ghi chú */

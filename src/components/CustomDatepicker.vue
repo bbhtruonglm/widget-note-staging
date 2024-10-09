@@ -1,9 +1,17 @@
 <template>
   <div class="flex gap-1">
+    <div
+      class="border px-2 font-medium rounded outline-none h-full flex items-center justify-center cursor-pointer relative"
+      @click="openTimePicker"
+    >
+      {{ time_value.hour.toString().padStart(2, '0') }}:{{
+        time_value.minute.toString().padStart(2, '0')
+      }}
+    </div>
     <VueDatePicker
       :disabled="props.frequency_selected === 'EVERY_DAY'"
       v-model="date_value"
-      input-class-name="border-1 outline-none h-full text-sm px-2 text-center"
+      input-class-name="border-1 outline-none h-full text-sm px-2 text-center font-medium text-sm font-[revert]"
       teleport-center
       :enable-time-picker="false"
       :day-names="['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"
@@ -11,21 +19,13 @@
       :min-date="new Date()"
       hide-input-icon
       :format="
-        props.frequency_selected === 'EVERY_WEEK' ? customFormat : 'dd/MM/yyyy'
+        props.frequency_selected === 'EVERY_WEEK' ? customFormat : formatNormal
       "
       menu-class-name="text-sm shadow-md"
       :clearable="false"
       auto-apply
     >
     </VueDatePicker>
-    <div
-      class="border px-2 rounded outline-none h-full flex items-center justify-center cursor-pointer relative"
-      @click="openTimePicker"
-    >
-      {{ time_value.hour.toString().padStart(2, '0') }}:{{
-        time_value.minute.toString().padStart(2, '0')
-      }}
-    </div>
     <Teleport to="body">
       <div
         class="w-screen h-screen fixed top-0 left-0 text-gray-500 font-medium"
@@ -106,6 +106,8 @@ import { vi } from 'date-fns/locale'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, nextTick, ref, watch } from 'vue'
+import { isToday, isTomorrow, isYesterday } from 'date-fns'
+import { useI18n } from 'vue-i18n'
 
 /** label các thứ trong toàn */
 const dayInWeek = [
@@ -117,6 +119,8 @@ const dayInWeek = [
   'Thứ sáu',
   'Thứ bảy',
 ]
+
+const { t } = useI18n()
 
 /** props */
 const props = defineProps<{
@@ -226,6 +230,38 @@ function openTimePicker() {
 /** format cho datepicker khi chọn tần suất là hằng tuần */
 function customFormat(date: Date) {
   return `${dayInWeek[date.getDay()]}`
+}
+
+function formatNormal(date: Date): string {
+  let before_string = ''
+  if(isToday(date)){
+    before_string = t('today')
+  }
+  if(isYesterday(date)){
+    before_string = t('yesterday')
+  }
+  if(isTomorrow(date)){
+    before_string = t('tomorrow')
+  }
+
+  if(!before_string){
+    switch(date.getDay()){
+      case 0: before_string = t('sunday'); break;
+      case 1: before_string = t('monday'); break;
+      case 2: before_string = t('tuesday'); break;
+      case 3: before_string = t('wednesday'); break;
+      case 4: before_string = t('thursday'); break;
+      case 5: before_string = t('friday'); break;
+      case 6: before_string = t('saturday'); break;
+      default: before_string = '';
+    }
+  }
+
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  return `${before_string}, ${day}/${month}/${year}`;
 }
 </script>
 <style lang="scss">

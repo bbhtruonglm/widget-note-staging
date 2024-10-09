@@ -60,13 +60,15 @@
       class="w-full h-60 flex items-center justify-center flex-col"
       v-if="!appStore.note_list.length"
     >
-      <img
-        class="w-48"
+      <div class="bg-slate-100 rounded-full p-6">
+        <img
+        class="w-9 h-9"
         src="./../assets/empty.svg"
         alt=""
       />
-      <p class="text-gray-600 font-medium mt-2">
-        <!-- Hãy bắt đầu bằng việc tạo ghi chú mới! -->
+      </div>
+      <p class="text-gray-500 font-medium mt-2">
+        {{  $t('none_note') }}
       </p>
     </div>
   </div>

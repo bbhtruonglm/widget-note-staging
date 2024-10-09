@@ -14,6 +14,8 @@ export default {
   '9:00_tomorrow': '9.00 น. วันพรุ่งนี้', //'9:00 ngày mai',
   other: 'อื่น ๆ', // 'Khác',
   frequency: 'ความถี่', // 'Tần suất',
+  time:'เวลา', //'Thời gian',
+  reminder: 'เตือนความจำนัดหมาย', // 'Nhắc lịch',
   dont_repeat: 'ไม่ซ้ำ', //'Không lặp lại',
   every_day: 'ทุกวัน', //'Hàng ngày',
   every_week: 'ทุกสัปดาห์', //'Hàng tuần',
@@ -44,4 +46,17 @@ export default {
   question_remove: 'คุณแน่ใจหรือว่าต้องการลบหมายเหตุนี้', //'Bạn chắc chắn muốn xóa ghi chú này?',
   cancel: 'ยกเลิก', //'Huỷ',
   confirm: 'ยืนยัน', //'Xác nhận'
+  placeholder_create_new: 'สร้างบันทึกใหม่สำหรับ', //'Tạo ghi chú mới đến',
+  guide:'Shift + Enter เพื่อสร้างทันที', //'Nhấn Shift + Enter เพื่อ để tạo nhanh'
+  none_note:'ไม่มีบันทึก', //'Chưa có ghi chú được tạo'
+  today:'วันนี้', //'hôm nay
+  yesterday:'เมื่อวาน', //'Hôm qua
+  tomorrow:'พรุ่งนี้', //'Ngày mai
+  monday:'วันจันทร์', //'Thứ hai
+  tuesday:'วันอังคาร', //'Thứ ba
+  wednesday:'วันพุธ', //'Thứ tư
+  thursday:'วันพฤหัส', //'Thứ năm
+  friday:'วันศุกร์', //'Thứ sáu
+  saturday:'วันเสาร์', //'Thứ bảy
+  sunday:'วันอาทิตย์', //'Chủ nhật'
 }
