@@ -1,7 +1,9 @@
 import { InputRequest } from '@/interface/request'
 import { DOMAIN } from '@/services/constant/domain'
 import WIDGET from 'bbh-chatbox-widget-js-sdk'
-/** hàm gọi API */
+/** hàm gọi API 
+ * @deprecated
+*/
 export const request = async ({
   path,
   method,
@@ -31,6 +33,40 @@ export const request = async ({
     if (method === 'GET') body = undefined
     //call api
     let result: any = await fetch(DOMAIN + path, { method, headers, body })
+    //chuyển kết quả về json
+    if (json) result = await result.json()
+    return result
+  } catch (e) {
+    console.log('asyncRequest', e)
+    throw e
+  }
+}
+
+/** hàm để gọi API mới */
+export const requestV2 = async ({
+  path,
+  method,
+  json,
+  body = {},
+  headers = {},
+}: InputRequest) => {
+  try {
+    // nếu body là json thì chuyển sang dạng chuỗi và tên các tham số header
+    if (json) {
+      body = JSON.stringify(body)
+    }
+    //nếu method là GET thì bỏ body
+    if (method === 'GET') body = undefined
+
+    // tạo header
+    headers = {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      ...(headers || {}),
+    }
+
+    //call api
+    let result: any = await fetch(path, { method, headers, body })
     //chuyển kết quả về json
     if (json) result = await result.json()
     return result

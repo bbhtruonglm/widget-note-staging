@@ -6,9 +6,11 @@
       <div class="min-h-14 h-14 relative w-full">
         <textarea
           id="content_note"
-          class="w-full h-full border rounded-md py-1.5 pl-3 pr-9 outline-none text-sm resize-none placeholder:text-slate-400"
+          class="w-full h-full border rounded-md py-1.5 pl-3 pr-9 outline-none text-sm resize-none placeholder:text-slate-400 placeholder:truncate"
           v-model="appStore.note_content"
-          :placeholder="`${$t('placeholder_create_new')} ${commonStore.data_client?.public_profile?.client_name}`"
+          :placeholder="`${$t('placeholder_create_new')} ${
+            commonStore.data_client?.public_profile?.client_name
+          }`"
           @keyup="handleKeyUp"
         />
         <label
@@ -40,19 +42,21 @@
 <script setup lang="ts">
 //* import function
 import { request } from '@/services/request'
+import { apiGetInfoContact, apiGetInfoMerchant } from '@/services/api/merchant'
+import { useAppStore, useCommonStore, useMerchantStore } from '@/services/stores'
 
 //* import library
 import { onMounted, ref } from 'vue'
-import { useAppStore, useCommonStore } from '@/services/stores'
 import WIDGET from 'bbh-chatbox-widget-js-sdk'
 
 //* import components
-import CreateNote from '@/components/CreateNote.vue'
 import NoteList from '@/components/NoteList.vue'
+import CreateNote from '@/components/CreateNote.vue'
 
 // stores
 const appStore = useAppStore()
 const commonStore = useCommonStore()
+const merchantStore = useMerchantStore()
 
 /** ref tới component CreateNote */
 const create_note = ref<InstanceType<typeof CreateNote>>()
@@ -60,12 +64,14 @@ const create_note = ref<InstanceType<typeof CreateNote>>()
 //lấy danh sách khi nhận thông báo từ chatbox
 WIDGET.onEvent(async () => {
   getNoteList()
-  if(appStore.tab_selected === 'CREATE_NEW') changeTab('NOTE_LIST')
+  if (appStore.tab_selected === 'CREATE_NEW') changeTab('NOTE_LIST')
   appStore.note_content = ''
 })
 onMounted(() => {
   //lấy danh sách khi bật app
   getNoteList()
+  // lấy dữ liệu merchant
+  getDataMerchant()
 })
 
 /** hàm chuyển tab */
@@ -113,4 +119,63 @@ async function getNoteList() {
     appStore.is_loading = false
   }
 }
+
+async function getDataMerchant() {
+  try {
+    // lấy token merchant
+    await getMerchantToken()
+
+    // nếu có token thì lấy dữ liệu contact
+    if (merchantStore.merchant_token) getContact()
+  } catch (error) {
+    console.log('get data merchant', error)
+  }
+}
+
+/** hàm lấy token merchant */
+async function getMerchantToken() {
+  try {
+    let result = await apiGetInfoMerchant({
+      body: {
+        client_id: WIDGET.client_id || '',
+        access_token: WIDGET.partner_token || WIDGET.access_token || '',
+        secret_key: $env.secret_key
+      },
+    })
+
+    // nếu có token thì lưu vào store
+    if (result?.data?.access_token) {
+      merchantStore.merchant_token = result.data.access_token
+    } 
+    // nếu không có thì log lỗi
+    else {
+      console.log('Không lấy được token merchant')
+    }
+
+  } catch (error) {
+    console.log('get merchant token', error)
+  }
+}
+
+/** hàm lấy dữ liệu id contact */
+async function getContact() {
+  try {
+    let result = await apiGetInfoContact({
+      body: commonStore.data_client,
+    })
+
+    // nếu có id contact thì lưu vào store
+    if (result?.id) {
+      merchantStore.contact_id = result.id
+    } 
+    // nếu không có thì log lỗi
+    else {
+      console.log('Không lấy được id contact')
+    }
+    
+  } catch (error) {
+    console.log('get contact', error)
+  }
+}
+
 </script>

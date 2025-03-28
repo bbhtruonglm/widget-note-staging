@@ -14,3 +14,13 @@ interface InputRequest {
   /** tham số header */
   headers?: HeadersInit
 }
+
+/** Đầu vào để request api */
+export interface InputRequestApi {
+  /** Dữ liệu gửi đi */
+  body?: any
+  /** Đuôi api */
+  end_point?: string
+  /** Headers */
+  headers?: {}
+}

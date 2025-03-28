@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 //* import function
-import { useAppStore, useCommonStore } from '@/services/stores'
+import { useAppStore, useCommonStore, useMerchantStore } from '@/services/stores'
 import { request } from '@/services/request'
 import { add } from 'date-fns/add'
 
@@ -86,6 +86,7 @@ import CustomDatepicker from '@/components/CustomDatepicker.vue'
 
 // * import constant
 import { FREQUENCY } from '@/services/constant/create_note'
+import { apiCreateNoteContact } from '@/services/api/merchant'
 
 //* store
 const appStore = useAppStore()
@@ -280,7 +281,7 @@ async function createNewNote() {
             )
           : null,
         frequency: frequency_selected.value,
-        fb_staff_id: commonStore.data_client?.public_profile?.current_staff_id,
+        fb_staff_id: commonStore.data_client?.public_profile?.current_user_id,
         staff_name: commonStore.data_client?.public_profile?.current_staff_name,
       },
       method: 'POST',
@@ -295,6 +296,17 @@ async function createNewNote() {
     } else {
       // sửa ghi chú trong danh sách ghi chú
       appStore.note_list[appStore.note_index] = result.data
+    }
+
+    // nếu là tạo mới call api tạo ghi chú bên app contact
+    if (!appStore.isUpdateNote()) {
+      await apiCreateNoteContact({
+        body: {
+          contact_id: useMerchantStore().contact_id,
+          content: props.input_content,
+          is_template:false,
+        },
+      })
     }
 
     //tắt loading
