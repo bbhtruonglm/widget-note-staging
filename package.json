@@ -20,7 +20,7 @@
     "@vuepic/vue-datepicker": "^8.7.0",
     "async": "^3.2.5",
     "axios": "^1.7.2",
-    "bbh-chatbox-widget-js-sdk": "^1.0.8",
+    "bbh-chatbox-widget-js-sdk": "1.0.11",
     "date-fns": "^3.6.0",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",

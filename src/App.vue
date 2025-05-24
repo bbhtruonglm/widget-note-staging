@@ -10,6 +10,7 @@
 // * import function
 import { Toast } from '@/services/toast'
 import { queryString } from '@/services/helper'
+import { useAutoCreate } from '@/composable/useAutoCreate'
 import { useAppStore, useCommonStore } from '@/services/stores'
 
 // * import library
@@ -20,6 +21,7 @@ import { onMounted, ref } from 'vue'
 import DashBoard from '@/components/DashBoard.vue'
 import ActiveWidget from '@/components/ActiveWidget.vue'
 import Loading from '@/components/Loading.vue'
+import { set } from 'lodash'
 
 // let url_string = window.location.href
 // let url = new URL(url_string)
@@ -28,6 +30,9 @@ import Loading from '@/components/Loading.vue'
 // * store
 const appStore = useAppStore()
 const commonStore = useCommonStore()
+
+/** composable */
+const { listenPreviewEvent, sendPreviewEvent } = useAutoCreate()
 
 // * khởi tạo hàm thông báo
 const $toast = new Toast()
@@ -42,6 +47,39 @@ onMounted(() => {
   WIDGET.onEvent(() => {
     // ghi lại thông tin khách hàng mới
     getDataClient()
+  })
+
+  // gửi sự kiện đến chatbot để lấy dữ liệu
+  sendPreviewEvent({
+    type: 'get.data'
+  })
+
+  // fakeEvent()
+
+  // lắng nghe event từ app chatbot
+  listenPreviewEvent((data:any) => {
+    /** nội dung ghi chú */
+    const NOTE_CONTENT = data.note
+
+    /** thời gian hẹn lịch */
+    const DATE_TIME = data.datetime?.toString() || ''
+
+    /** đường dẫn nội dung ghi chú */
+    const NOTE_PATH = 'public_profile.ai[0].ctas.schedule_appointment.input_message'
+
+    /** đường dẫn thời gian hẹn lịch */
+    const DATE_PATH = 'public_profile.ai[0].ctas.schedule_appointment.datetime'
+
+    // lưu lại nội dung ghi chú
+    set(commonStore.data_client,NOTE_PATH, NOTE_CONTENT)
+
+    // lưu lại thời gian hẹn lịch
+    set(commonStore.data_client,DATE_PATH, DATE_TIME)
+
+    if (NOTE_CONTENT || DATE_TIME) {
+      appStore.tab_selected = 'CREATE_NEW'
+      appStore.is_auto_create = true
+    }
   })
 })
 
@@ -143,6 +181,7 @@ async function decodeClient(){
       commonStore.data_client = await WIDGET.decodeClient()
     } 
   }catch (error) {
+    throw error
     console.log('getDataClient', error)
   }
 }
