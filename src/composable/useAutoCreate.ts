@@ -1,5 +1,9 @@
+import { Toast } from "@/services/toast"
+
 /** hàm xử lý các logic liên quan đến trang preview */
 export function useAutoCreate() {
+  const $toast = new Toast()
+
   /** hàm gửi sự kiện đến trang preview */
   function sendPreviewEvent(data: any) {
     /** dữ liệu gửi cho app chatbot Native */
@@ -29,10 +33,10 @@ export function useAutoCreate() {
 
   /** hàm lắng nghe sự kiện từ trang preview */
   function listenPreviewEvent(cb: Function) {
-    document.addEventListener('message', (event: any) => {
+    window.addEventListener('message', (event: any) => {
       console.log('[App] Nhận event từ Frame:::', event.data)
 
-      alert(event.data)
+      $toast.error(event.data)
 
       /** dữ liệu tự động tạo ghi chú được gửi từ app chatbot Native */
       const AUTO_CREATE_NOTE_EVENT = JSON.parse(event.data)
