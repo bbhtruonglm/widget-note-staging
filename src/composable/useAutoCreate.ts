@@ -1,8 +1,5 @@
-import { Toast } from "@/services/toast"
-
 /** hàm xử lý các logic liên quan đến trang preview */
 export function useAutoCreate() {
-  const $toast = new Toast()
 
   /** hàm gửi sự kiện đến trang preview */
   function sendPreviewEvent(data: any) {
